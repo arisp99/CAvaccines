@@ -1,11 +1,17 @@
 Package: CAvaccines
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: An Analysis of CA Vaccination Rates and Disease Occurence
+Version: 0.0.0.9000
+Authors@R: person("Aris", "Paschalidis", email = "aris.paschalidis@gmail.com",
+                  role = c("aut", "cre"))
+Maintainer: Aris Paschalidis <aris.paschalidis@gmail.com>
+URL: https://github.com/arisp99/Cavaccines
+BugReports: https://github.com/arisp99/Cavaccines/issues 
+Description: Final project for BIOL 1600: Introduction to Vaccines. In this
+  project, I examine the vaccination rates of CA students and the number of
+  cases for various infectious diseases. 
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.6)
+RoxygenNote: 7.1.0
