@@ -6,9 +6,9 @@ yr_2017_2018 <- system.file(
 )
 
 # Extract relevant data from each file
-yr_2017_2018 <- read_excel(yr_2017_2018,
+yr_2017_2018 <- readxl::read_excel(yr_2017_2018,
                            sheet = "Enrollment 20 or More",
-                           range = cell_rows(5:6735),
+                           range = readxl::cell_rows(5:6735),
                            na = ".",
                            col_names = FALSE)
 
@@ -28,8 +28,8 @@ for (i in 6:16){
 # Label the columns of the dataset
 colnames(yr_2017_2018) <-
   c("School_Code", "Jurisdiction", "School_Type", "School_Name", "Enrollment",
-    "%_Up_to_Date", "%_Conditional", "%_PME", "%_PBE", "%_Others", "%_Overdue",
-    "%_DTP", "%_Polio", "%_MMR", "%_HepB", "%_Var", "Reported")
+    "Up_to_Date", "Conditional", "PME", "PBE", "Others", "Overdue",
+    "DTP", "Polio", "MMR", "HepB", "Var", "Reported")
 
 # Change name of dataset
 vaccination <- as.data.frame(yr_2017_2018)
