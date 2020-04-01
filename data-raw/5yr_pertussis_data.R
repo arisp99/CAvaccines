@@ -24,6 +24,9 @@ names(pertussis) <- gsub("[^[:alnum:]]", "", names(pertussis))
 # Change name of CALIFORNIA cell to TOTALS to be clearer
 pertussis[6, 1] = "TOTALS"
 
+# Make all county names uppercase
+pertussis$Jurisdiction <- toupper(pertussis$Jurisdiction)
+
 # Turn Jurisdiction into a factor
 pertussis$Jurisdiction <- as.factor(pertussis$Jurisdiction)
 

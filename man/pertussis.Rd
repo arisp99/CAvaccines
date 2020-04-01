@@ -3,7 +3,7 @@
 \docType{data}
 \name{pertussis}
 \alias{pertussis}
-\title{Pertussis data}
+\title{Pertussis Data}
 \format{
 A data frame with variables:
   \describe{

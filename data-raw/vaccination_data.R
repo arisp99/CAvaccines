@@ -32,8 +32,31 @@ colnames(yr_2017_2018) <-
     "DTP", "Polio", "MMR", "HepB", "Var", "Reported")
 
 # Change name of dataset and turn Jurisdiction into a factor
-vaccination <- as.data.frame(yr_2017_2018)
-vaccination$Jurisdiction <- as.factor(vaccination$Jurisdiction)
+school_vaccination <- as.data.frame(yr_2017_2018)
+school_vaccination$Jurisdiction <- as.factor(school_vaccination$Jurisdiction)
 
-# Save vaccination data in data/ folder
-usethis::use_data(vaccination, overwrite = TRUE)
+# Save school level vaccination data in data/ folder
+usethis::use_data(school_vaccination, overwrite = TRUE)
+
+# We now take the school level vaccination and create county level vaccination
+county_vaccination <- school_vaccination %>%
+  dplyr::group_by(Jurisdiction) %>%
+  dplyr::summarize(
+    avg_Enrollment  = mean(Enrollment),
+    avg_Up_to_Date  = mean(Up_to_Date),
+    avg_Conditional = mean(Conditional),
+    avg_PME         = mean(PME),
+    avg_PBE         = mean(PBE),
+    avg_Others      = mean(Others),
+    avg_Overdue     = mean(Overdue),
+    avg_DTP         = mean(DTP),
+    avg_Polio       = mean(Polio),
+    avg_MMR         = mean(MMR),
+    avg_HepB        = mean(HepB),
+    avg_Var         = mean(Var))
+
+# Save as dataframe
+county_vaccination <- as.data.frame(county_vaccination)
+
+# Save county level vaccination data in data/ folder
+usethis::use_data(county_vaccination, overwrite = TRUE)
