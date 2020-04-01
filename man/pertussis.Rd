@@ -8,26 +8,26 @@
 A data frame with variables:
   \describe{
     \item{Jurisdiction}{Jurisdiction of California}
-    \item{2008 Cases}{Number of pertussis cases in 2008}
-    \item{2008 Rates}{Incidence rate per 100,000 in 2008}
-    \item{2009 Cases}{Number of pertussis cases in 2009}
-    \item{2009 Rates}{Incidence rate per 100,000 in 2009}
-    \item{2010 Cases}{Number of pertussis cases in 2010}
-    \item{2010 Rates}{Incidence rate per 100,000 in 2010}
-    \item{2011 Cases}{Number of pertussis cases in 2011}
-    \item{2011 Rates}{Incidence rate per 100,000 in 2011}
-    \item{2012 Cases}{Number of pertussis cases in 2012}
-    \item{2012 Rates}{Incidence rate per 100,000 in 2012}
-    \item{2013 Cases}{Number of pertussis cases in 2013}
-    \item{2013 Rates}{Incidence rate per 100,000 in 2013}
-    \item{2014 Cases}{Number of pertussis cases in 2014}
-    \item{2014 Rates}{Incidence rate per 100,000 in 2014}
-    \item{2015 Cases}{Number of pertussis cases in 2015}
-    \item{2015 Rates}{Incidence rate per 100,000 in 2015}
-    \item{2016 Cases}{Number of pertussis cases in 2016}
-    \item{2016 Rates}{Incidence rate per 100,000 in 2016}
-    \item{2017 Cases}{Number of pertussis cases in 2017}
-    \item{2017 Rates}{Incidence rate per 100,000 in 2017}
+    \item{2008Cases}{Number of pertussis cases in 2008}
+    \item{2008Rates}{Incidence rate per 100,000 in 2008}
+    \item{2009Cases}{Number of pertussis cases in 2009}
+    \item{2009Rates}{Incidence rate per 100,000 in 2009}
+    \item{2010Cases}{Number of pertussis cases in 2010}
+    \item{2010Rates}{Incidence rate per 100,000 in 2010}
+    \item{2011Cases}{Number of pertussis cases in 2011}
+    \item{2011Rates}{Incidence rate per 100,000 in 2011}
+    \item{2012Cases}{Number of pertussis cases in 2012}
+    \item{2012Rates}{Incidence rate per 100,000 in 2012}
+    \item{2013Cases}{Number of pertussis cases in 2013}
+    \item{2013Rates}{Incidence rate per 100,000 in 2013}
+    \item{2014Cases}{Number of pertussis cases in 2014}
+    \item{2014Rates}{Incidence rate per 100,000 in 2014}
+    \item{2015Cases}{Number of pertussis cases in 2015}
+    \item{2015Rates}{Incidence rate per 100,000 in 2015}
+    \item{2016Cases}{Number of pertussis cases in 2016}
+    \item{2016Rates}{Incidence rate per 100,000 in 2016}
+    \item{2017Cases}{Number of pertussis cases in 2017}
+    \item{2017Rates}{Incidence rate per 100,000 in 2017}
   }
 }
 \source{
