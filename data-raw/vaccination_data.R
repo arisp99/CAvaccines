@@ -27,9 +27,9 @@ for (i in 6:16){
 
 # Label the columns of the dataset
 colnames(yr_2017_2018) <-
-  c("School Code", "Jurisdiction", "School Type", "School Name", "Enrollment",
-    "% Up to Date", "% Conditional", "% PME", "% PBE", "% Others", "% Overdue",
-    "% DTP", "% Polio", "% MMR", "% HepB", "% Var", "Reported")
+  c("School_Code", "Jurisdiction", "School_Type", "School_Name", "Enrollment",
+    "%_Up_to_Date", "%_Conditional", "%_PME", "%_PBE", "%_Others", "%_Overdue",
+    "%_DTP", "%_Polio", "%_MMR", "%_HepB", "%_Var", "Reported")
 
 # Change name of dataset
 vaccination <- as.data.frame(yr_2017_2018)
