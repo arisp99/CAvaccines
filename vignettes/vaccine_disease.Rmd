@@ -29,17 +29,22 @@ is a dataset containing all pertussis cases, arranged by county, from the years 
 2008-2009 in the state of California. Vaccination is a dataset that contains detailed
 information about vaccination rates for several thousand schools in CA.
 
+One approach to examining our data is to study the variable names.
+
 ```{r}
 # We print the first couple lines from each dataset
-head(vaccination)
-head(pertussis)
+names(vaccination)
+names(pertussis)
 ```
 
-Now that we have seen what our data look like, it is particularly helpful to
-visualize our data. To do this, we will create bar plots and density plots of
-our variables.
+Another, likely more useful option is to visualize our data. To do this, we 
+will create bar plots and density plots of our variables.
 
 ```{r}
-density_plot(vaccination, "School Code")
+# bar_plot(vaccination, "Jurisdiction", limits = c(0, 1600))
+
+bar_plot(vaccination, "School_Type", limits = c(0, 6000))
+
+density_plot(vaccination, "Enrollment")
 ```
 
