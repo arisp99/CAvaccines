@@ -31,8 +31,9 @@ colnames(yr_2017_2018) <-
     "Up_to_Date", "Conditional", "PME", "PBE", "Others", "Overdue",
     "DTP", "Polio", "MMR", "HepB", "Var", "Reported")
 
-# Change name of dataset
+# Change name of dataset and turn Jurisdiction into a factor
 vaccination <- as.data.frame(yr_2017_2018)
+vaccination$Jurisdiction <- as.factor(vaccination$Jurisdiction)
 
 # Save vaccination data in data/ folder
 usethis::use_data(vaccination, overwrite = TRUE)

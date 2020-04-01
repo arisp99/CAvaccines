@@ -24,5 +24,8 @@ names(pertussis) <- gsub("[^[:alnum:]]", "", names(pertussis))
 # Change name of CALIFORNIA cell to TOTALS to be clearer
 pertussis[6, 1] = "TOTALS"
 
+# Turn Jurisdiction into a factor
+pertussis$Jurisdiction <- as.factor(pertussis$Jurisdiction)
+
 # Save pertussis data in data/ folder
 usethis::use_data(pertussis, overwrite = TRUE)
