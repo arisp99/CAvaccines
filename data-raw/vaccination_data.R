@@ -25,9 +25,6 @@ for (i in 6:16){
   yr_2017_2018[,i] = as.numeric(unlist(yr_2017_2018[,i]))
 }
 
-# Old Method
-# thing <-  vapply(yr_2017_2018[, 5:16], function (x) as.numeric(stringr::str_replace_all(x, "[^[:alnum:]]", "")), numeric())
-
 # Label the columns of the dataset
 colnames(yr_2017_2018) <-
   c("School Code", "Jurisdiction", "School Type", "School Name", "Enrollment",
