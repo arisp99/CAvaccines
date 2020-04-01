@@ -6,6 +6,8 @@
 #' @docType package
 #' @name CAvaccines
 #'
+#' @import ggplot2
+#'
 NULL
 
 #' Pertussis data

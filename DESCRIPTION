@@ -16,9 +16,13 @@ LazyData: true
 Depends: R (>= 3.6)
 Imports:
     magrittr,
-    ggplot2
+    ggplot2,
+    ggsci
 Suggests:
     dplyr,
     readxl,
-    stringr
+    stringr,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.1.0
+VignetteBuilder: knitr
