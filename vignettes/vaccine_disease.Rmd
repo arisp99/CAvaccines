@@ -1,0 +1,45 @@
+---
+title: "Vaccines and Infectious Disease"
+author: Aris Paschalidis
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vaccines and Infectious Disease}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CAvaccines)
+```
+
+# Read in Data
+The first step in any analysis we want to perform is to first read in our datasets.
+For this analysis, we will utilize two datasets both found in the Data/ folder
+of this project: pertussis and vaccination. Both of these datasets are documented
+in the associated help files, but we summarize here for convenience. Pertussis 
+is a dataset containing all pertussis cases, arranged by county, from the years of 
+2008-2009 in the state of California. Vaccination is a dataset that contains detailed
+information about vaccination rates for several thousand schools in CA.
+
+```{r}
+# We print the first couple lines from each dataset
+head(vaccination)
+head(pertussis)
+```
+
+Now that we have seen what our data look like, it is particularly helpful to
+visualize our data. To do this, we will create bar plots and density plots of
+our variables.
+
+```{r}
+density_plot(vaccination, "School Code")
+```
+
