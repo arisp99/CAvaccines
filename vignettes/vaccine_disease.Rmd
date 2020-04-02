@@ -22,29 +22,55 @@ library(CAvaccines)
 
 # Read in Data
 The first step in any analysis we want to perform is to first read in our datasets.
-For this analysis, we will utilize two datasets both found in the Data/ folder
-of this project: pertussis and vaccination. Both of these datasets are documented
-in the associated help files, but we summarize here for convenience. Pertussis 
-is a dataset containing all pertussis cases, arranged by county, from the years of 
-2008-2009 in the state of California. Vaccination is a dataset that contains detailed
-information about vaccination rates for several thousand schools in CA.
+For this analysis, we will utilize three datasets both found in the Data/ folder
+of this project: school_vaccination, county_vaccination, and pertussis. All three 
+of these datasets are documented in the associated help files, but we summarize here
+for convenience. Before continueing with this vignette, we strongly encourge readers
+to examine the documentation for each dataset, if they have not already.
 
-One approach to examining our data is to study the variable names.
+* `school_vaccination` is a dataset that contains detailed information 
+about vaccination rates for several thousand schools in CA. 
+* `county_vaccination` is a related dataset to school_vaccination. It
+contains information about vaccination rates for each CA county.
+* `pertussis` is a dataset containing all pertussis cases, arranged by 
+county, from the years of 2008-2009 in the state of California.
+
+One approach to examining our data is to study the variable names. 
 
 ```{r}
-# We print the first couple lines from each dataset
-names(vaccination)
+# We print the names of each dataset
+names(school_vaccination)
+names(county_vaccination)
 names(pertussis)
+
+# vaccine_pertussis = merge(county_vaccination, pertussis, by = "Jurisdiction")
 ```
 
-Another, likely more useful option is to visualize our data. To do this, we 
+Another, likely more useful option, is to visualize our data. To do this, we 
 will create bar plots and density plots of our variables.
 
 ```{r}
 # bar_plot(vaccination, "Jurisdiction", limits = c(0, 1600))
 
-bar_plot(vaccination, "School_Type", limits = c(0, 6000))
+# bar_plot(school_vaccination, "School_Type", limits = c(0, 6000))
+# 
+# density_plot(school_vaccination, "Enrollment")
+# 
+# ggplot(school_vaccination, aes(x = Jurisdiction, y = PME, fill = Jurisdiction)) + geom_boxplot(color = "white") +
+#     theme_dark() +
+#     theme(panel.background = element_rect(fill = "#2D2D2D"),
+#           plot.title = element_text(hjust = 0.5, size = 10), 
+#           axis.title = element_text(size = 7),
+#           axis.text.x = element_text(angle = 90),
+#           legend.position = "none") +
+#     scale_x_discrete(labels = pertussis$Jurisdiction) +
+#     scale_y_continuous(limits = c(0, 100))
+# 
+# boxplot(PME ~ Jurisdiction, data=school_vaccination, xlim=c(1,59), ylim=c(0,100), xaxt='n',
+#         ylab="PME % from county population", 
+#         title="Permanent Medical Exemption, aggregated by counties")
+# axis(side = 2)
+# text(2:59, y=par("usr")[3]-0.5, labels = pertussis$Jurisdiction, srt = 90, cex = 0.6, pos = 2, xpd = TRUE)
 
-density_plot(vaccination, "Enrollment")
 ```
 
