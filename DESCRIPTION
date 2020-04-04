@@ -1,6 +1,6 @@
 Package: CAvaccines
 Type: Package
-Title: An Analysis of CA Vaccination Rates and Disease Occurence
+Title: An Analysis of CA Vaccination Rates and Disease Occurrence
 Version: 0.0.0.9000
 Authors@R: person("Aris", "Paschalidis", email = "aris.paschalidis@gmail.com",
                   role = c("aut", "cre"))
@@ -20,9 +20,11 @@ Imports:
     ggsci
 Suggests:
     dplyr,
-    readxl,
-    stringr,
     knitr,
-    rmarkdown
+    readxl,
+    rmarkdown,
+    spelling,
+    stringr
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
+Language: en-US

@@ -2,7 +2,7 @@
 #'
 #' @description Plots a bar plot using ggplot2.
 #'
-#' @param data The dataset that contins the variable to be plotted
+#' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
 #' @param limits The minimum and maximum y values. By default, y-min set to
 #' \code{0} and y-max set to \code{1000}.
@@ -38,7 +38,7 @@ bar_plot <- function(data, variable, limits = c(0, 1000), title = NULL, xlab = N
 #'
 #' @description Plots a density plot using ggplot2.
 #'
-#' @param data The dataset that contins the variable to be plotted
+#' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
 #' @param title The title of the figure. By default set to \code{NULL}.
 #' @param xlab The x label of the figure. By default set to \code{NULL}.

@@ -25,7 +25,7 @@ The first step in any analysis we want to perform is to first read in our datase
 For this analysis, we will utilize three datasets both found in the Data/ folder
 of this project: school_vaccination, county_vaccination, and pertussis. All three 
 of these datasets are documented in the associated help files, but we summarize here
-for convenience. Before continueing with this vignette, we strongly encourge readers
+for convenience. Before continuing with this vignette, we strongly encourage readers
 to examine the documentation for each dataset, if they have not already.
 
 * `school_vaccination` is a dataset that contains detailed information 

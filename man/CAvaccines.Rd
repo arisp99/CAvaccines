@@ -4,7 +4,7 @@
 \name{CAvaccines}
 \alias{CAvaccines}
 \title{CAvaccines: A package for analyzing the relationship between vaccination
-rates and infectious disease occurence in california schools}
+rates and infectious disease occurrence in California schools}
 \description{
 Project was undertaken as the final project for BIOL 1600.
 }

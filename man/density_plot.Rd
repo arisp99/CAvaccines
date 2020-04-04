@@ -7,7 +7,7 @@
 density_plot(data, variable, title = NULL, xlab = NULL, ylab = "Density")
 }
 \arguments{
-\item{data}{The dataset that contins the variable to be plotted}
+\item{data}{The dataset that contains the variable to be plotted}
 
 \item{variable}{The variable to be plotted}
 

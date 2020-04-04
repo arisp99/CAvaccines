@@ -20,7 +20,7 @@ A data frame with variables:
     B vaccine and one dose of varicella vaccine or physician-documented
     varicella disease.}
     \item{avg_Conditional}{Average percent of students that do not meet all
-    requirenments. This may because the student lacks but is
+    requirements. This may because the student lacks but is
     not yet due for a required dose, has a physician affidavit of Temporary
     Medical Exemption for one or more doses, or is a transfer student who
     has no record yet.}
