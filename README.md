@@ -16,6 +16,9 @@ vaccination rates and infectious disease cases in California schools.
 
 ## Installation
 
+To install the package, please follow the code below. In order to
+install, devtools must be installed and loaded.
+
 ``` r
 # install.packages("devtools")
 devtools::install_github("arisp99/CAvaccines")
