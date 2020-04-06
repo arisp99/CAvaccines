@@ -17,7 +17,8 @@ Depends: R (>= 3.6)
 Imports:
     magrittr,
     ggplot2,
-    ggsci
+    ggsci,
+    rlang
 Suggests:
     dplyr,
     knitr,

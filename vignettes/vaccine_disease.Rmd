@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(CAvaccines)
+library(ggplot2)
 ```
 
 # Read in Data
@@ -50,7 +51,7 @@ Another, likely more useful option, is to visualize our data. To do this, we
 will create bar plots and density plots of our variables.
 
 ```{r}
-# bar_plot(vaccination, "Jurisdiction", limits = c(0, 1600))
+bar_plot(school_vaccination, "Jurisdiction", limits = c(0, 1600)) + theme(legend.position = "none")
 
 # bar_plot(school_vaccination, "School_Type", limits = c(0, 6000))
 # 

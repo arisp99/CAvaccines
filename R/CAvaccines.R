@@ -7,6 +7,7 @@
 #' @name CAvaccines
 #'
 #' @import ggplot2
+#' @importFrom rlang .data
 #'
 NULL
 

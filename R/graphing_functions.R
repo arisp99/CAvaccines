@@ -13,7 +13,7 @@
 #' @export
 bar_plot <- function(data, variable, limits = c(0, 1000), title = NULL, xlab = NULL, ylab = "Count"){
   pl = ggplot(data = data, aes(x = eval(parse(text = variable)), fill = eval(parse(text = variable)))) +
-    geom_bar(stat = "count") + geom_text(aes(label = ..count..), stat = "count",
+    geom_bar(stat = "count") + geom_text(aes(label =.data$..count..), stat = "count",
     vjust = -0.3, color = "white", size = 3.5) + theme_dark() +
     theme(panel.background = element_rect(fill = "#2D2D2D"),
           plot.title = element_text(hjust = 0.5, size = 10), axis.title = element_text(size = 7),
