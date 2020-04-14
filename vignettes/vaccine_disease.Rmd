@@ -43,8 +43,6 @@ One approach to examining our data is to study the variable names.
 names(school_vaccination)
 names(county_vaccination)
 names(pertussis)
-
-# vaccine_pertussis = merge(county_vaccination, pertussis, by = "Jurisdiction")
 ```
 
 Another, likely more useful option, is to visualize our data. To do this, we 
@@ -73,5 +71,15 @@ bar_plot(school_vaccination, "Jurisdiction", limits = c(0, 1600)) + theme(legend
 # axis(side = 2)
 # text(2:59, y=par("usr")[3]-0.5, labels = pertussis$Jurisdiction, srt = 90, cex = 0.6, pos = 2, xpd = TRUE)
 
+```
+
+```{r}
+map_plot(county_vaccination, "avg_DTP", "Average DTP Vaccination Rates", breaks = seq(50, 70, 5))
+
+map_plot(county_vaccination, "avg_Up_to_Date", "Average Up to Date Rates", breaks = seq(55, 80, 5))
+
+map_plot(county_vaccination, "avg_PME", "Average PME Rates", breaks = seq(0, 35, 5))
+
+map_plot(county_vaccination, "avg_PBE", "Average PBE Rates", breaks = seq(0, 5, 1))
 ```
 
