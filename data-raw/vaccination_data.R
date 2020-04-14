@@ -31,9 +31,10 @@ colnames(yr_2017_2018) <-
     "Up_to_Date", "Conditional", "PME", "PBE", "Others", "Overdue",
     "DTP", "Polio", "MMR", "HepB", "Var", "Reported")
 
-# Change name of dataset and turn Jurisdiction into a factor
+# Change name of dataset and turn Jurisdiction into a factor, turn into lowercase
 school_vaccination <- as.data.frame(yr_2017_2018)
 school_vaccination$Jurisdiction <- as.factor(school_vaccination$Jurisdiction)
+school_vaccination$Jurisdiction <- tolower(school_vaccination$Jurisdiction)
 
 # Save school level vaccination data in data/ folder
 usethis::use_data(school_vaccination, overwrite = TRUE)
