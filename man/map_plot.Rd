@@ -4,7 +4,7 @@
 \alias{map_plot}
 \title{Plot California counties}
 \usage{
-map_plot(data, variable, title = NULL, breaks, limits)
+map_plot(data, variable, title = NULL, breaks)
 }
 \arguments{
 \item{data}{The dataset that contains the variable to be plotted}
@@ -14,8 +14,6 @@ map_plot(data, variable, title = NULL, breaks, limits)
 \item{title}{The title of the figure. By default set to \code{NULL}}
 
 \item{breaks}{The breaks to be used in the shading of the map}
-
-\item{limits}{The maximum and minimum values (rounded) for the variable}
 }
 \description{
 Plots the California counties, filled according to a particular

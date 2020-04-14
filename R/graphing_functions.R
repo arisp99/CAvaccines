@@ -69,19 +69,19 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #' @param variable The variable to be plotted
 #' @param title The title of the figure. By default set to \code{NULL}
 #' @param breaks The breaks to be used in the shading of the map
-#' @param limits The maximum and minimum values (rounded) for the variable
 #'
 #' @export
-map_plot <- function(data, variable, title = NULL, breaks, limits){
+map_plot <- function(data, variable, title = NULL, breaks){
   counties = map_data("county")
-  ca_county = counties %>% dplyr::filter(region == 'california')
+  ca_county = counties %>% dplyr::filter(.data$region == 'california')
 
   ca_map_vaccination = merge(ca_county, data, by.x = "subregion", by.y = "Jurisdiction", all.y = TRUE)
 
-  ca_base = ggplot(data = ca_map_vaccination, mapping = aes(x = long, y = lat, group = group, fill = eval(parse(text = variable)))) +
+  ca_base = ggplot(data = ca_map_vaccination,
+                   aes(x = .data$long, y = .data$lat, group = .data$group, fill = eval(parse(text = variable)))) +
     coord_quickmap() + theme_void() +
     geom_polygon(color = "black") +
-    scale_fill_viridis(option = "viridis", breaks = breaks, limits = limits) +
+    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(breaks[1], breaks[length(breaks)])) +
     theme(plot.title = element_text(hjust = 0.5, size = 15),
           legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
     labs(title = title, fill = "Rates (%)")

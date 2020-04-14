@@ -18,7 +18,8 @@ Imports:
     magrittr,
     ggplot2,
     ggsci,
-    rlang
+    rlang,
+    viridis
 Suggests:
     dplyr,
     knitr,
