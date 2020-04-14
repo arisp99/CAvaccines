@@ -58,3 +58,33 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 
   return(pl)
 }
+
+
+#' @title Plot California counties
+#'
+#' @description Plots the California counties, filled according to a particular
+#' feature.
+#'
+#' @param data The dataset that contains the variable to be plotted
+#' @param variable The variable to be plotted
+#' @param title The title of the figure. By default set to \code{NULL}
+#' @param breaks The breaks to be used in the shading of the map
+#' @param limits The maximum and minimum values (rounded) for the variable
+#'
+#' @export
+map_plot <- function(data, variable, title = NULL, breaks, limits){
+  counties = map_data("county")
+  ca_county = counties %>% dplyr::filter(region == 'california')
+
+  ca_map_vaccination = merge(ca_county, data, by.x = "subregion", by.y = "Jurisdiction", all.y = TRUE)
+
+  ca_base = ggplot(data = ca_map_vaccination, mapping = aes(x = long, y = lat, group = group, fill = eval(parse(text = variable)))) +
+    coord_quickmap() + theme_void() +
+    geom_polygon(color = "black") +
+    scale_fill_viridis(option = "viridis", breaks = breaks, limits = limits) +
+    theme(plot.title = element_text(hjust = 0.5, size = 15),
+          legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
+    labs(title = title, fill = "Rates (%)")
+
+  return(ca_base)
+}
