@@ -20,6 +20,7 @@ Imports:
     corrplot,
     Hmisc,
     magrittr,
+    maps,
     ggplot2,
     ggsci,
     RColorBrewer,
