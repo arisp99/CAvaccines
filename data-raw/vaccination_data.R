@@ -33,31 +33,35 @@ colnames(yr_2017_2018) <-
 
 # Change name of dataset and turn Jurisdiction into a factor, turn into lowercase
 school_vaccination <- as.data.frame(yr_2017_2018)
-school_vaccination$Jurisdiction <- as.factor(school_vaccination$Jurisdiction)
 school_vaccination$Jurisdiction <- tolower(school_vaccination$Jurisdiction)
+school_vaccination$Jurisdiction <- as.factor(school_vaccination$Jurisdiction)
 
 # Save school level vaccination data in data/ folder
 usethis::use_data(school_vaccination, overwrite = TRUE)
 
-# We now take the school level vaccination and create county level vaccination
+# We now take the school level vaccination data and create county level
+# vaccination data. For each measurment, we find the total number of kids per
+# school for that measurment, and then sum those numbers to get county level
+# data.
 county_vaccination <- school_vaccination %>%
   dplyr::group_by(Jurisdiction) %>%
   dplyr::summarize(
-    avg_Enrollment  = mean(Enrollment),
-    avg_Up_to_Date  = mean(Up_to_Date),
-    avg_Conditional = mean(Conditional),
-    avg_PME         = mean(PME),
-    avg_PBE         = mean(PBE),
-    avg_Others      = mean(Others),
-    avg_Overdue     = mean(Overdue),
-    avg_DTP         = mean(DTP),
-    avg_Polio       = mean(Polio),
-    avg_MMR         = mean(MMR),
-    avg_HepB        = mean(HepB),
-    avg_Var         = mean(Var))
+    total_Enrollment  = sum(Enrollment),
+    total_Up_to_Date  = sum(Up_to_Date/100*Enrollment),
+    total_Conditional = sum(Conditional/100*Enrollment),
+    total_PME         = sum(PME/100*Enrollment),
+    total_PBE         = sum(PBE/100*Enrollment),
+    total_Others      = sum(Others/100*Enrollment),
+    total_Overdue     = sum(Overdue/100*Enrollment),
+    total_DTP         = sum(DTP/100*Enrollment),
+    total_Polio       = sum(Polio/100*Enrollment),
+    total_MMR         = sum(MMR/100*Enrollment),
+    total_HepB        = sum(HepB/100*Enrollment),
+    total_Var         = sum(Var/100*Enrollment))
 
-# Save as dataframe
+# Save as dataframe and turn Jurisdiction into a factor
 county_vaccination <- as.data.frame(county_vaccination)
+county_vaccination$Jurisdiction <- as.factor(county_vaccination$Jurisdiction)
 
 # Save county level vaccination data in data/ folder
 usethis::use_data(county_vaccination, overwrite = TRUE)
