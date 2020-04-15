@@ -49,37 +49,101 @@ Another, likely more useful option, is to visualize our data. To do this, we
 will create bar plots and density plots of our variables.
 
 ```{r}
-bar_plot(school_vaccination, "Jurisdiction", limits = c(0, 1600)) + theme(legend.position = "none")
+# bar_plot(school_vaccination, "Jurisdiction", limits = c(0, 1600)) + theme(legend.position = "none")
 
-# bar_plot(school_vaccination, "School_Type", limits = c(0, 6000))
-# 
-# density_plot(school_vaccination, "Enrollment")
-# 
-# ggplot(school_vaccination, aes(x = Jurisdiction, y = PME, fill = Jurisdiction)) + geom_boxplot(color = "white") +
-#     theme_dark() +
-#     theme(panel.background = element_rect(fill = "#2D2D2D"),
-#           plot.title = element_text(hjust = 0.5, size = 10), 
-#           axis.title = element_text(size = 7),
-#           axis.text.x = element_text(angle = 90),
-#           legend.position = "none") +
-#     scale_x_discrete(labels = pertussis$Jurisdiction) +
-#     scale_y_continuous(limits = c(0, 100))
-# 
-# boxplot(PME ~ Jurisdiction, data=school_vaccination, xlim=c(1,59), ylim=c(0,100), xaxt='n',
-#         ylab="PME % from county population", 
-#         title="Permanent Medical Exemption, aggregated by counties")
-# axis(side = 2)
-# text(2:59, y=par("usr")[3]-0.5, labels = pertussis$Jurisdiction, srt = 90, cex = 0.6, pos = 2, xpd = TRUE)
+bar_plot(school_vaccination, "School_Type", limits = c(0, 6000))
 
+density_plot(school_vaccination, "Enrollment")
+
+ggplot(school_vaccination, aes(x = Jurisdiction, y = PME, fill = Jurisdiction)) + geom_boxplot(color = "gray") +
+    theme_dark() +
+    theme(panel.background = element_rect(fill = "#2D2D2D"),
+          plot.title = element_text(hjust = 0.5, size = 10),
+          axis.title = element_text(size = 7),
+          axis.text.x = element_text(angle = 90),
+          legend.position = "none") +
+    scale_x_discrete(labels = pertussis$Jurisdiction) +
+    scale_y_continuous(limits = c(0, 100))
+
+boxplot(PME ~ Jurisdiction, data=school_vaccination, xlim=c(1,59), ylim=c(0,100), xaxt='n',
+        ylab="PME % from county population",
+        title="Permanent Medical Exemption, aggregated by counties")
+axis(side = 2)
+text(2:59, y=par("usr")[3]-0.5, labels = school_vaccination$Jurisdiction, srt = 90, cex = 0.6, pos = 2, xpd = TRUE)
 ```
 
 ```{r}
-map_plot(county_vaccination, "avg_DTP", "Average DTP Vaccination Rates", breaks = seq(50, 70, 5))
+percents <- dplyr::select(county_vaccination, Jurisdiction, total_Enrollment, total_DTP, total_Up_to_Date, total_PME, total_PBE)
+percents$total_DTP        <- with(percents, total_DTP/total_Enrollment*100) 
+percents$total_Up_to_Date <- with(percents, total_Up_to_Date/total_Enrollment*100) 
+percents$total_PME        <- with(percents, total_PME/total_Enrollment*100) 
+percents$total_PBE        <- with(percents, total_PBE/total_Enrollment*100) 
 
-map_plot(county_vaccination, "avg_Up_to_Date", "Average Up to Date Rates", breaks = seq(55, 80, 5))
+map_plot(percents, "total_DTP", "Total DTP Vaccinations", breaks = seq(50, 70, 5))
 
-map_plot(county_vaccination, "avg_PME", "Average PME Rates", breaks = seq(0, 35, 5))
+map_plot(percents, "total_Up_to_Date", "Total Up to Date", breaks = seq(55, 80, 5))
 
-map_plot(county_vaccination, "avg_PBE", "Average PBE Rates", breaks = seq(0, 5, 1))
+map_plot(percents, "total_PME", "Total PME", breaks = seq(0, 35, 5))
+
+map_plot(percents, "total_PBE", "Total PBE", breaks = seq(0, 5, 1))
 ```
+
+```{r}
+pertussis_long <- pertussis %>%
+  tidyr::gather(Comb, Number, -Jurisdiction) %>%
+  tidyr::separate(Comb, into = c("Year", "Measure"), sep = "_") %>% 
+  dplyr::filter(Measure == "Cases")
+
+str(pertussis_long)
+
+plt <- as.data.frame(pertussis_long %>%
+      dplyr::group_by(Year, Measure) %>%
+      dplyr::summarize(Number = mean(Number)) %>% 
+      dplyr::filter(Measure == "Cases"))
+
+str(plt)
+
+ggplot(pertussis_long, aes(x = Year, y = Number)) + geom_boxplot()
+
+ggplot(plt, aes(x = Year, y = Number, fill = Number)) + geom_col() + theme(legend.position = "none")
+```
+
+# Modeling
+
+```{r}
+model_data <- merge(county_vaccination, pertussis, by = "Jurisdiction")
+
+select2017 <- dplyr::select(model_data, total_Enrollment:total_Var, `2017_Cases`)
+scale2017 <- as.data.frame(scale(select2017))
+
+set.seed(2)
+sample = caTools::sample.split(scale2017$`2017_Cases`, SplitRatio = 0.8)
+train = subset(scale2017, sample == TRUE)
+test  = subset(scale2017, sample == FALSE)
+
+lm <- stats::lm(`2017_Cases` ~ ., data = train)
+summary(lm)
+
+predict_lm <- lm %>% stats::predict(test)
+caret::R2(predict_lm, test$`2017_Cases`)
+
+cart <- rpart::rpart(`2017_Cases` ~ ., data = scale2017)
+predict_cart <- cart %>% stats::predict(scale2017)
+confMat <- table(scale2017$`2017_Cases`, predict_cart)
+sum(diag(confMat))/sum(confMat)
+```
+
+```{r}
+corr_mat <- Hmisc::rcorr(as.matrix(scale2017), type = "spearman")
+M <- corr_mat$r
+P_mat <- corr_mat$P
+
+corrplot::corrplot(M, method = "color", col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
+  addCoef.col = "black",
+  tl.col = "black", tl.srt = 50,tl.cex = 0.60,
+  p.mat = P_mat, sig.level = 0.05, pch.cex = 5,
+  mar=c(0,0,2,0), number.cex = 1)
+```
+
+
 
