@@ -19,7 +19,7 @@ yr_2013_2017 <- readxl::read_excel(yr_2013_2017, sheet = "5Yr Pertussis", range 
 pertussis <- merge(yr_2008_2012, yr_2013_2017, by = "Jurisdiction")
 
 # Alter names so that there is no whitespace
-names(pertussis) <- gsub("[^[:alnum:]]", "", names(pertussis))
+names(pertussis) <- gsub("[^[:alnum:]]", "_", names(pertussis))
 
 # Change name of CALIFORNIA cell to TOTALS to be clearer
 pertussis[6, 1] = "TOTALS"
