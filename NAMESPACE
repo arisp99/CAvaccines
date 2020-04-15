@@ -3,6 +3,7 @@
 export("%>%")
 export(bar_plot)
 export(density_plot)
+export(extract_vaccination)
 export(map_plot)
 import(ggplot2)
 importFrom(magrittr,"%>%")
