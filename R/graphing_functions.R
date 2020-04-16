@@ -68,20 +68,38 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
 #' @param title The title of the figure. By default set to \code{NULL}
-#' @param breaks The breaks to be used in the shading of the map
 #'
 #' @export
-map_plot <- function(data, variable, title = NULL, breaks){
+map_plot <- function(data, variable, title = NULL){
+  # Determine min and max values
+  min_v = DescTools::RoundTo(min(data[[variable]]), 5)
+  max_v = DescTools::RoundTo(max(data[[variable]]), 5)
+  diff = max_v - min_v
+
+  # Based on min and max values, determien optimal breaks. We stipulate
+  # that there shoud be at least five breaks
+  if (diff <= 5){
+    breaks = seq(min_v, max_v, 1)
+  } else if (diff <= 25){
+    breaks = seq(min_v, max_v, 5)
+  } else {
+    breaks = seq(min_v, max_v, 10)
+  }
+
+  # Get county data for CA
   counties = map_data("county")
   ca_county = counties %>% dplyr::filter(.data$region == 'california')
 
-  ca_map_vaccination = merge(ca_county, data, by.x = "subregion", by.y = "Jurisdiction", all.y = TRUE)
+  # Combine mapping data and our data
+  data$Jurisdiction = as.character(data$Jurisdiction)
+  ca_map_vaccination = dplyr::left_join(ca_county, data, by = c("subregion" = "Jurisdiction"))
 
+  # Create map
   ca_base = ggplot(data = ca_map_vaccination,
                    aes(x = .data$long, y = .data$lat, group = .data$group, fill = eval(parse(text = variable)))) +
     coord_quickmap() + theme_void() +
     geom_polygon(color = "black") +
-    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(breaks[1], breaks[length(breaks)])) +
+    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(min_v, max_v)) +
     theme(plot.title = element_text(hjust = 0.5, size = 15),
           legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
     labs(title = title, fill = "Rates (%)")
