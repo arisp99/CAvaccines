@@ -14,32 +14,13 @@ NULL
 #' Pertussis Data
 #'
 #' Pertussis data from the California Department of Public Health.
-#' The dataset includes the number of cases and the rate per 100,000
-#' individuals from the years of 2008 till 2017.
+#' The dataset includes the number of cases from the years of 2008 till 2017.
 #'
 #' @format A data frame with variables:
 #'   \describe{
 #'     \item{Jurisdiction}{Jurisdiction of California}
-#'     \item{2008_Cases}{Number of pertussis cases in 2008}
-#'     \item{2008_Rates}{Incidence rate per 100,000 in 2008}
-#'     \item{2009_Cases}{Number of pertussis cases in 2009}
-#'     \item{2009_Rates}{Incidence rate per 100,000 in 2009}
-#'     \item{2010_Cases}{Number of pertussis cases in 2010}
-#'     \item{2010_Rates}{Incidence rate per 100,000 in 2010}
-#'     \item{2011_Cases}{Number of pertussis cases in 2011}
-#'     \item{2011_Rates}{Incidence rate per 100,000 in 2011}
-#'     \item{2012_Cases}{Number of pertussis cases in 2012}
-#'     \item{2012_Rates}{Incidence rate per 100,000 in 2012}
-#'     \item{2013_Cases}{Number of pertussis cases in 2013}
-#'     \item{2013_Rates}{Incidence rate per 100,000 in 2013}
-#'     \item{2014_Cases}{Number of pertussis cases in 2014}
-#'     \item{2014_Rates}{Incidence rate per 100,000 in 2014}
-#'     \item{2015_Cases}{Number of pertussis cases in 2015}
-#'     \item{2015_Rates}{Incidence rate per 100,000 in 2015}
-#'     \item{2016_Cases}{Number of pertussis cases in 2016}
-#'     \item{2016_Rates}{Incidence rate per 100,000 in 2016}
-#'     \item{2017_Cases}{Number of pertussis cases in 2017}
-#'     \item{2017_Rates}{Incidence rate per 100,000 in 2017}
+#'     \item{Year}{The year the data was recorded}
+#'     \item{Cases}{The number of cases}
 #'   }
 #'
 #' @docType data

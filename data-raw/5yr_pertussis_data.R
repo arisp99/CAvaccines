@@ -24,11 +24,19 @@ names(pertussis) <- gsub("[^[:alnum:]]", "_", names(pertussis))
 # Change name of CALIFORNIA cell to TOTALS to be clearer
 pertussis[6, 1] = "TOTALS"
 
-# Make all county names lowercase
+# Make all county names lowercase and convert to a factor
 pertussis$Jurisdiction <- tolower(pertussis$Jurisdiction)
-
-# Turn Jurisdiction into a factor
 pertussis$Jurisdiction <- as.factor(pertussis$Jurisdiction)
+
+# Remove rates as the data, convert data to long format, and remove 2014 data
+# as the vaccination data for 2014 does not work
+pertussis <- pertussis %>%
+  dplyr::select(-contains("Rates")) %>%
+  tidyr::gather(Year, Cases, -Jurisdiction) %>%
+  dplyr::filter(Year != "2014_Cases")
+
+# Change the Year variable to have only the years
+pertussis$Year <- as.factor(gsub("[\\_[:alpha:]*]", "", pertussis$Year))
 
 # Save pertussis data in data/ folder
 usethis::use_data(pertussis, overwrite = TRUE)
