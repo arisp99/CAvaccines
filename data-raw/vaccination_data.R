@@ -1,67 +1,30 @@
-# Get data files
-yr_2017_2018 <- system.file(
-  "extdata",
-  "2017-18CA_KindergartenDataLetter.xlsx",
-  package = "CAvaccines"
-)
+# Run function to get county level vaccination data
+county_2008 <- extract_vaccination("2007-08CAKindergartenData.xls", "2008",  c(6, 7314), "KA0708")
+county_2009 <- extract_vaccination("2008-09CAKindergartenData.xls", "2009",  c(6, 7179), "KA0809")
+county_2010 <- extract_vaccination("2009-10CAKindergartenData.xls", "2010",  c(6, 7130), "KA0910")
+county_2011 <- extract_vaccination("2010-11CAKindergartenData.xls", "2011",  c(6, 7170), "KA1011")
+county_2012 <- extract_vaccination("2011-12CAKindergartenData.xls", "2012",  c(6, 7332), "Sheet1")
+county_2013 <- extract_vaccination("2012-13CAKindergartenData.xls", "2013",  c(6, 7642), "KA1213")
 
-# Extract relevant data from each file
-yr_2017_2018 <- readxl::read_excel(yr_2017_2018,
-                           sheet = "Enrollment 20 or More",
-                           range = readxl::cell_rows(5:6735),
-                           na = ".",
-                           col_names = FALSE)
+# 2014 is experiencing problems for an unknown reason. Exclude it for simplicity.
+# county_2014 <- extract_vaccination("2013-14CAKindergartenData.xlsx", "2014",  c(7, 7386), "KA1314")
 
-# Select a subset of variables and remove all schools that did not report
-yr_2017_2018 <-
-  yr_2017_2018 %>%
-  stats::setNames(1:30) %>%
-  dplyr::select(`1`:`3`, `6`:`7`, `9`, `11`, `13`, `15`, `17`, `19`, `21`, `23`, `25`, `27`, `29`, `30`) %>%
-  dplyr::filter(`30` != "N")
+county_2015 <- extract_vaccination("2014-15CAKindergartenData.xlsx", "2015",  c(6, 7470), "Sheet1")
+county_2016 <- extract_vaccination("2015-16CAKindergartenData.xls", "2016",  c(6, 7427), "KA1516")
+county_2017 <- extract_vaccination("2016-17KindergartenData.xlsx", "2017",  c(5, 6919), "Enrollment 20 or More")
 
-# Remove less than or equal, greater than or equal, and percent from data
-yr_2017_2018[, 6:16] <- as.data.frame(gsub("[^[:alnum:]]", "", as.matrix(yr_2017_2018[, 6:16])))
-for (i in 6:16){
-  yr_2017_2018[,i] = as.numeric(unlist(yr_2017_2018[,i]))
-}
+# We do not have data on 2018 cases
+# county_2018 <- extract_vaccination("2017-18CA_KindergartenDataLetter.xlsx", "2018",  c(5, 6735), "Enrollment 20 or More")
 
-# Label the columns of the dataset
-colnames(yr_2017_2018) <-
-  c("School_Code", "Jurisdiction", "School_Type", "School_Name", "Enrollment",
-    "Up_to_Date", "Conditional", "PME", "PBE", "Others", "Overdue",
-    "DTP", "Polio", "MMR", "HepB", "Var", "Reported")
+# Combine all the datasets together
+county_vaccination <-
+  dplyr::bind_rows(county_2008, county_2009, county_2010,
+                   county_2011, county_2012, county_2013,
+                   county_2015, county_2016, county_2017)
 
-# Change name of dataset and turn Jurisdiction into a factor, turn into lowercase
-school_vaccination <- as.data.frame(yr_2017_2018)
-school_vaccination$Jurisdiction <- tolower(school_vaccination$Jurisdiction)
-school_vaccination$Jurisdiction <- as.factor(school_vaccination$Jurisdiction)
-
-# Save school level vaccination data in data/ folder
-usethis::use_data(school_vaccination, overwrite = TRUE)
-
-# We now take the school level vaccination data and create county level
-# vaccination data. For each measurment, we find the total number of kids per
-# school for that measurment, and then sum those numbers to get county level
-# data.
-county_vaccination <- school_vaccination %>%
-  dplyr::group_by(Jurisdiction) %>%
-  dplyr::summarize(
-    total_Enrollment  = sum(Enrollment),
-    total_Up_to_Date  = sum(Up_to_Date/100*Enrollment),
-    total_Conditional = sum(Conditional/100*Enrollment),
-    total_PME         = sum(PME/100*Enrollment),
-    total_PBE         = sum(PBE/100*Enrollment),
-    total_Others      = sum(Others/100*Enrollment),
-    total_Overdue     = sum(Overdue/100*Enrollment),
-    total_DTP         = sum(DTP/100*Enrollment),
-    total_Polio       = sum(Polio/100*Enrollment),
-    total_MMR         = sum(MMR/100*Enrollment),
-    total_HepB        = sum(HepB/100*Enrollment),
-    total_Var         = sum(Var/100*Enrollment))
-
-# Save as dataframe and turn Jurisdiction into a factor
-county_vaccination <- as.data.frame(county_vaccination)
+# Convert Jurisdiction into a factor and year into a factor
 county_vaccination$Jurisdiction <- as.factor(county_vaccination$Jurisdiction)
+county_vaccination$Year <- as.factor(county_vaccination$Year)
 
 # Save county level vaccination data in data/ folder
 usethis::use_data(county_vaccination, overwrite = TRUE)

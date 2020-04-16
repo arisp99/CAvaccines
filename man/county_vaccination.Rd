@@ -32,10 +32,6 @@ A data frame with variables:
     whereby a parent requests exemption from the immunization requirements
     for school entry because all or some immunizations are contrary to the
     parent's beliefs.}
-    \item{total_Others}{Total number of students reported as attending independent
-    study who do not receive classroom-based instruction or home-based
-    private schools or receiving IEP services.}
-    \item{total_Overdue}{Total number of students overdue for one or more immunizations.}
     \item{total_DTP}{Total number of students with full DTP vaccination course. Full
     course defined as 4 or more doses of any diphtheria and tetanus toxoids
     and pertussis vaccines including diphtheria and tetanus toxoids, and any
@@ -50,7 +46,9 @@ A data frame with variables:
     Full course defined as 3 or more doses of Hepatitis B vaccine.}
     \item{total_Var}{Total number of students with full Varicella vaccination course.
     Full course defined as 1 or more doses of varicella at or after child's
-   first birthday, unadjusted for history of varicella illness.}
+    first birthday, unadjusted for history of varicella illness.}
+    \item{Year}{The year that the data was collected. School years represented as
+    \code{XXXX-YYYY} are coded as being collected in year \code{YYYY}.}
   }
 }
 \source{
