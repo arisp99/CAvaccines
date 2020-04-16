@@ -62,10 +62,9 @@ extract_vaccination <- function(file, year, rows, sheet){
       "Up_to_Date", "Conditional", "PME", "PBE",
       "DTP", "Polio", "MMR", "HepB", "Var")
 
-  # Change name of dataset and turn Jurisdiction into a factor, turn into lowercase
+  # Change name of dataset and turn Jurisdiction into lowercase
   school_yr <- as.data.frame(yr)
   school_yr$Jurisdiction <- tolower(school_yr$Jurisdiction)
-  school_yr$Jurisdiction <- as.factor(school_yr$Jurisdiction)
 
   # Make sure Enrollment is numeric
   school_yr$Enrollment <- as.numeric(school_yr$Enrollment)
@@ -88,9 +87,8 @@ extract_vaccination <- function(file, year, rows, sheet){
       total_HepB        = sum(.data$HepB/100*.data$Enrollment),
       total_Var         = sum(.data$Var/100*.data$Enrollment))
 
-  # Save as dataframe, turn Jurisdiction into a factor, add year
+  # Save as dataframe and add year
   county_yr <- as.data.frame(county_yr)
-  county_yr$Jurisdiction <- as.factor(county_yr$Jurisdiction)
   county_yr$Year <- rep(year, nrow(county_yr))
 
   return(county_yr)
