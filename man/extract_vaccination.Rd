@@ -4,7 +4,7 @@
 \alias{extract_vaccination}
 \title{Extract county level vaccination data}
 \usage{
-extract_vaccination(file, year, rows)
+extract_vaccination(file, year, rows, sheet)
 }
 \arguments{
 \item{file}{The file that contains the data to be extracted}
@@ -12,6 +12,8 @@ extract_vaccination(file, year, rows)
 \item{year}{The year that the data was collected}
 
 \item{rows}{The minimum and maximum rows to be extracted}
+
+\item{sheet}{The sheet that contains the data in the excel file}
 }
 \value{
 Returns the county level vaccination dataframe
