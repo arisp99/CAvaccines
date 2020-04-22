@@ -91,7 +91,6 @@ map_plot <- function(data, variable, title = NULL){
   ca_county = counties %>% dplyr::filter(.data$region == 'california')
 
   # Combine mapping data and our data
-  data$Jurisdiction = as.character(data$Jurisdiction)
   ca_map_vaccination = dplyr::left_join(ca_county, data, by = c("subregion" = "Jurisdiction"))
 
   # Create map

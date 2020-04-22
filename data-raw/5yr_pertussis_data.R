@@ -24,9 +24,8 @@ names(pertussis) <- gsub("[^[:alnum:]]", "_", names(pertussis))
 # Change name of CALIFORNIA cell to TOTALS to be clearer
 pertussis$Jurisdiction[pertussis$Jurisdiction == "CALIFORNIA"] = "TOTALS"
 
-# Make all county names lowercase and convert to a factor
+# Make all county names lowercase
 pertussis$Jurisdiction <- tolower(pertussis$Jurisdiction)
-pertussis$Jurisdiction <- as.factor(pertussis$Jurisdiction)
 
 # Convert data to long format, and remove 2014 data. We first gather the
 # "year" and the associated "number" (of cases). At this point, "year" and "number"

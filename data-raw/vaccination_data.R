@@ -22,8 +22,7 @@ county_vaccination <-
                    county_2011, county_2012, county_2013,
                    county_2015, county_2016, county_2017)
 
-# Convert Jurisdiction into a factor and year into a factor
-county_vaccination$Jurisdiction <- as.factor(county_vaccination$Jurisdiction)
+# Convert year into a factor
 county_vaccination$Year <- as.factor(county_vaccination$Year)
 
 # Save county level vaccination data in data/ folder
