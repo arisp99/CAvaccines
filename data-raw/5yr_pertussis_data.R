@@ -22,7 +22,7 @@ pertussis <- dplyr::full_join(yr_2008_2012, yr_2013_2017, by = "Jurisdiction")
 names(pertussis) <- gsub("[^[:alnum:]]", "_", names(pertussis))
 
 # Change name of CALIFORNIA cell to TOTALS to be clearer
-pertussis[6, 1] = "TOTALS"
+pertussis$Jurisdiction[pertussis$Jurisdiction == "CALIFORNIA"] = "TOTALS"
 
 # Make all county names lowercase and convert to a factor
 pertussis$Jurisdiction <- tolower(pertussis$Jurisdiction)
