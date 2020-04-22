@@ -23,18 +23,16 @@ library(ggplot2)
 
 # Read in Data
 The first step in any analysis we want to perform is to first read in our datasets.
-For this analysis, we will utilize three datasets both found in the Data/ folder
-of this project: school_vaccination, county_vaccination, and pertussis. All three 
-of these datasets are documented in the associated help files, but we summarize here
-for convenience. Before continuing with this vignette, we strongly encourage readers
-to examine the documentation for each dataset, if they have not already.
+For this analysis, we will utilize two datasets, both found in the Data/ folder
+of this project: county_vaccination, and pertussis. Both of these of these datasets
+are documented in the associated help files, but we summarize here for convenience.
+Before continuing with this vignette, we strongly encourage readers to examine the
+documentation for each dataset, if they have not already.
 
-* `school_vaccination` is a dataset that contains detailed information 
-about vaccination rates for several thousand schools in CA. 
-* `county_vaccination` is a related dataset to school_vaccination. It
-contains information about vaccination rates for each CA county.
-* `pertussis` is a dataset containing all pertussis cases, arranged by 
-county, from the years of 2008-2009 in the state of California.
+* `county_vaccination` is a dataset containing information about vaccination rates
+for each CA county for the years of 2008-2017.
+* `pertussis` is a dataset containing all pertussis cases, arranged by county, from
+the years of 2008-2017 in the state of California.
 
 One approach to examining our data is to study the variable names. 
 
@@ -52,6 +50,7 @@ of students that are up to date on their vaccinations, the percent of students
 that have a PME, and the percent of students that have a PBE.
 
 ```{r}
+# Graphs are for the year 2017
 percents <- dplyr::filter(county_vaccination, Year == "2017")
 percents <- dplyr::select(percents, Jurisdiction, total_Enrollment, total_DTP, total_Up_to_Date, total_PME, total_PBE)
 
@@ -67,35 +66,53 @@ map_plot(percents, "total_PBE", "Total PBE")
 ```
 
 ```{r}
-ggplot(pertussis, aes(x = Year, y = Cases)) + geom_boxplot()
+omit <- na.omit(pertussis)
 
-means <- as.data.frame(pertussis %>% dplyr::group_by(Year) %>% dplyr::summarize(Average = mean(Cases)))
-ggplot(means, aes(x = Year, y = Average, fill = Average)) + geom_col() + theme(legend.position = "none")
+ggplot(omit, aes(x = Year, y = Cases)) + geom_boxplot()
+ggplot(omit, aes(x = Year, y = Rates)) + geom_boxplot()
+
+means <- as.data.frame(omit %>% dplyr::group_by(Year) %>% 
+                         dplyr::summarize(avg_cases = mean(Cases), avg_rates = mean(Rates)))
+
+ggplot(means, aes(x = Year, y = avg_cases, fill = avg_cases)) + geom_col() + theme(legend.position = "none")
+ggplot(means, aes(x = Year, y = avg_rates, fill = avg_rates)) + geom_col() + theme(legend.position = "none")
 ```
 
 # Modeling
 
 ```{r}
-model_data  <- merge(county_vaccination, pertussis, by = c("Jurisdiction", "Year"))
-scaled_data <- model_data %>% dplyr::select(-one_of(c("Jurisdiction"))) %>% dplyr::mutate_if(is.numeric, scale) %>% as.data.frame()
+`%notin%` <- Negate(`%in%`)
 
-# set.seed(103)
-sample = caTools::sample.split(scaled_data$Cases, SplitRatio = 0.7)
+model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year"))
+scaled_data <- model_data %>% 
+  dplyr::filter(Year %notin% c("2010", "2008")) %>%
+  dplyr::select(-one_of(c("Jurisdiction", "Year"))) %>%
+  dplyr::mutate_if(is.numeric, scale) %>% 
+  as.data.frame()
+
+scaled_data <- na.omit(scaled_data)
+
+# fit <- forecast::tslm(Cases ~ total_Up_to_Date+total_Conditional+total_PME+total_PBE+total_DTP, data=ts(scaled_data))
+# summary(fit)
+
+set.seed(0)
+sample = caTools::sample.split(scaled_data$Cases, SplitRatio = 0.8)
 train = subset(scaled_data, sample == TRUE)
 test  = subset(scaled_data, sample == FALSE)
 
-lm <- stats::lm(Cases ~ ., data = train)
+lm <- stats::lm(Cases ~. -Rates, data = train)
 summary(lm)
 
 predict_lm <- lm %>% stats::predict(test)
-caret::R2(predict_lm, test$Cases)
+print(paste("Test R2 Linear:", round(caret::R2(predict_lm, test$Cases), 4)))
 
-cart <- rpart::rpart(Cases ~ ., data = train)
+cart <- rpart::rpart(Cases ~., data = train)
 # prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
 
 predict_cart <- cart %>% stats::predict(test)
 confMat <- table(test$Cases, predict_cart)
-sum(diag(confMat))/sum(confMat)
+print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
+
 ```
 
 ```{r}
