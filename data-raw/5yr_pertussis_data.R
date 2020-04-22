@@ -16,7 +16,7 @@ yr_2008_2012 <- readxl::read_excel(yr_2008_2012, sheet = "5Yr Pertussis", range 
 yr_2013_2017 <- readxl::read_excel(yr_2013_2017, sheet = "5Yr Pertussis", range = readxl::cell_rows(2:64))
 
 # Combine the files together to get data from 2008-2017
-pertussis <- merge(yr_2008_2012, yr_2013_2017, by = "Jurisdiction")
+pertussis <- dplyr::full_join(yr_2008_2012, yr_2013_2017, by = "Jurisdiction")
 
 # Alter names so that there is no whitespace
 names(pertussis) <- gsub("[^[:alnum:]]", "_", names(pertussis))
@@ -40,6 +40,10 @@ pertussis <- pertussis %>%
   tidyr::separate(Year, c("Year", "Type")) %>%
   tidyr::spread(Type, Number) %>%
   dplyr::filter(Year != "2014")
+
+# Convert pertussis to a dataframe and convert year into a factor
+pertussis <- as.data.frame(pertussis)
+pertussis$Year <- as.factor(pertussis$Year)
 
 # Save pertussis data in data/ folder
 usethis::use_data(pertussis, overwrite = TRUE)
