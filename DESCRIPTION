@@ -19,6 +19,7 @@ Imports:
     caret,
     corrplot,
     DescTools,
+    dplyr,
     Hmisc,
     magrittr,
     maps,
@@ -28,15 +29,14 @@ Imports:
     rlang,
     rpart,
     stats,
-    tidyr,
     viridis
 Suggests:
-    dplyr,
     knitr,
     readxl,
     rmarkdown,
     spelling,
-    stringr
+    stringr,
+    tidyr
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Language: en-US

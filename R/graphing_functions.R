@@ -76,7 +76,7 @@ map_plot <- function(data, variable, title = NULL){
   max_v = DescTools::RoundTo(max(data[[variable]]), 5)
   diff = max_v - min_v
 
-  # Based on min and max values, determien optimal breaks. We stipulate
+  # Based on min and max values, determine optimal breaks. We stipulate
   # that there shoud be at least five breaks
   if (diff <= 5){
     breaks = seq(min_v, max_v, 1)
@@ -87,7 +87,7 @@ map_plot <- function(data, variable, title = NULL){
   }
 
   # Get county data for CA
-  counties = map_data("county")
+  counties = ggplot2::map_data("county")
   ca_county = counties %>% dplyr::filter(.data$region == 'california')
 
   # Combine mapping data and our data
