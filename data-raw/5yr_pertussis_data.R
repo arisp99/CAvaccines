@@ -28,15 +28,18 @@ pertussis[6, 1] = "TOTALS"
 pertussis$Jurisdiction <- tolower(pertussis$Jurisdiction)
 pertussis$Jurisdiction <- as.factor(pertussis$Jurisdiction)
 
-# Remove rates as the data, convert data to long format, and remove 2014 data
-# as the vaccination data for 2014 does not work
+# Convert data to long format, and remove 2014 data. We first gather the
+# "year" and the associated "number" (of cases). At this point, "year" and "number"
+# contain both Cases and Rates of disease incidence. Therefore, we split year
+# into "Year" and "Type", the year and whether the data point is cases or rates
+# respectively. We then split the "Type" variable depending on whether the data
+# point is Cases or Rates. Finally, we exclude the year 2014, due to issues in
+# collecting vaccination data for 2014
 pertussis <- pertussis %>%
-  dplyr::select(-contains("Rates")) %>%
-  tidyr::gather(Year, Cases, -Jurisdiction) %>%
-  dplyr::filter(Year != "2014_Cases")
-
-# Change the Year variable to have only the years
-pertussis$Year <- as.factor(gsub("[\\_[:alpha:]*]", "", pertussis$Year))
+  tidyr::gather(Year, Number, -Jurisdiction) %>%
+  tidyr::separate(Year, c("Year", "Type")) %>%
+  tidyr::spread(Type, Number) %>%
+  dplyr::filter(Year != "2014")
 
 # Save pertussis data in data/ folder
 usethis::use_data(pertussis, overwrite = TRUE)

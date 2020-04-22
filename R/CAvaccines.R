@@ -21,6 +21,7 @@ NULL
 #'     \item{Jurisdiction}{Jurisdiction of California}
 #'     \item{Year}{The year the data was recorded}
 #'     \item{Cases}{The number of cases}
+#'     \item{Rates}{The number of cases per 100,000 people}
 #'   }
 #'
 #' @docType data
