@@ -7,7 +7,7 @@ county_2012 <- extract_vaccination("2011-12CAKindergartenData.xls", "2012",  c(6
 county_2013 <- extract_vaccination("2012-13CAKindergartenData.xls", "2013",  c(6, 7642), "KA1213")
 
 # 2014 is experiencing problems for an unknown reason. Exclude it for simplicity.
-# county_2014 <- extract_vaccination("2013-14CAKindergartenData.xlsx", "2014",  c(7, 7386), "KA1314")
+# county_2014 <- extract_vaccination("2013-14CAKindergartenData.xls", "2014",  c(6, 7386), "KA1314")
 
 county_2015 <- extract_vaccination("2014-15CAKindergartenData.xlsx", "2015",  c(6, 7470), "Sheet1")
 county_2016 <- extract_vaccination("2015-16CAKindergartenData.xls", "2016",  c(6, 7427), "KA1516")
