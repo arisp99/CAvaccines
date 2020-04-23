@@ -75,44 +75,80 @@ ggplot(means, aes(x = Year, y = avg_rates, fill = avg_rates)) + geom_col() + the
 ```
 
 # Modeling
-
+We first set up data for modeling.
 ```{r}
 `%notin%` <- Negate(`%in%`)
 
-model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year"))
-scaled_data <- model_data %>% 
-  dplyr::filter(Year %notin% c("2010", "2008")) %>%
-  dplyr::select(-one_of(c("Jurisdiction", "Year"))) %>%
-  dplyr::mutate_if(is.numeric, scale) %>% 
-  as.data.frame()
+model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year")) %>% 
+  dplyr::filter(Year %notin% c("2010")) %>%
+  dplyr::filter(Jurisdiction != "totals")
 
-scaled_data <- na.omit(scaled_data)
-
-# fit <- forecast::tslm(Cases ~ total_Up_to_Date+total_Conditional+total_PME+total_PBE+total_DTP, data=ts(scaled_data))
-# summary(fit)
-
-set.seed(0)
-sample = caTools::sample.split(scaled_data$Cases, SplitRatio = 0.8)
-train = subset(scaled_data, sample == TRUE)
-test  = subset(scaled_data, sample == FALSE)
-
-lm <- stats::lm(Cases ~. -Rates, data = train)
-summary(lm)
-
-predict_lm <- lm %>% stats::predict(test)
-print(paste("Test R2 Linear:", round(caret::R2(predict_lm, test$Cases), 4)))
-
-cart <- rpart::rpart(Cases ~., data = train)
-# prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
-
-predict_cart <- cart %>% stats::predict(test)
-confMat <- table(test$Cases, predict_cart)
-print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
-
+summary(model_data)
 ```
 
+By total numbers and cases.
 ```{r}
-corr_mat <- Hmisc::rcorr(as.matrix(scaled_data), type = "spearman")
+scaled_total_data <- model_data %>% 
+  dplyr::select(-one_of(c("Jurisdiction", "Year", "Rates"))) %>%
+  dplyr::select(-contains("percent_")) %>%
+  dplyr::mutate_if(is.numeric, scale) %>% 
+  as.data.frame() %>% na.omit()
+
+# fit <- forecast::tslm(Cases ~ total_Up_to_Date+total_Conditional+total_PME+total_PBE+total_DTP+total_Polio+total_MMR+total_HepB+total_Var+trend, data=ts(scaled_total_data))
+# summary(fit)
+
+# set.seed(0)
+t_sample = caTools::sample.split(scaled_total_data$Cases, SplitRatio = 0.7)
+t_train = subset(scaled_total_data, t_sample == TRUE)
+t_test  = subset(scaled_total_data, t_sample == FALSE)
+
+lm <- stats::lm(Cases ~., data = t_train)
+summary(lm)
+
+predict_lm <- lm %>% stats::predict(t_test)
+print(paste("Test R2 Linear:", round(caret::R2(predict_lm, t_test$Cases), 4)))
+
+cart <- rpart::rpart(Cases ~., data = t_train)
+# prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
+
+predict_cart <- cart %>% stats::predict(t_test)
+confMat <- table(t_test$Cases, predict_cart)
+print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
+```
+
+By percents and rates
+```{r}
+scaled_percent_data <- model_data %>% 
+  dplyr::select(-one_of(c("Jurisdiction", "Year", "Cases"))) %>%
+  dplyr::select(-contains("total_")) %>%
+  # dplyr::mutate_if(is.numeric, scale) %>%
+  as.data.frame() %>% na.omit()
+
+# scaled_percent_data$Rates <- scaled_percent_data$Rates/1000
+summary(scaled_percent_data)
+
+# set.seed(0)
+p_sample = caTools::sample.split(scaled_percent_data$Rates, SplitRatio = 0.8)
+p_train = subset(scaled_percent_data, p_sample == TRUE)
+p_test  = subset(scaled_percent_data, p_sample == FALSE)
+
+lm <- stats::lm(Rates ~., data = p_train)
+summary(lm)
+
+predict_lm <- lm %>% stats::predict(p_test)
+print(paste("Test R2 Linear:", round(caret::R2(predict_lm, p_test$Rates), 4)))
+
+cart <- rpart::rpart(Rates ~., data = p_train)
+# prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
+
+predict_cart <- cart %>% stats::predict(p_test)
+confMat <- table(p_test$Rates, predict_cart)
+print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
+```
+
+
+```{r}
+corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
 M <- corr_mat$r
 P_mat <- corr_mat$P
 
