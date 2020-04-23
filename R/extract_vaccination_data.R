@@ -49,8 +49,16 @@ extract_vaccination <- function(file, year, rows, sheet){
   # Remove less than or equal, greater than or equal, and percent from data.
   # Note that we only do this for a subset of the data as the other datasets
   # had problems here
-  if (year %in% c("2013", "2017", "2018")){
-    yr[, 5:14] <- as.data.frame(gsub("[^[:digit:]*\\.*[:digit:]*$]", "", as.matrix(yr[, 5:14])))
+  if (year %in% c("2017", "2018")){
+    for (i in 5:14){
+      yr[, i] <- gsub("[[:punct:]]", "", as.matrix(yr[, i]))
+      yr[, i] = as.numeric(unlist(yr[, i]))
+    }
+  }
+
+  # Convert year 2013 columns into numbers because otherwise, was having issues with
+  # parsing data file
+  if (year == "2013"){
     for (i in 5:14){
       yr[, i] = as.numeric(unlist(yr[, i]))
     }
