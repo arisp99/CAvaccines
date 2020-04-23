@@ -47,6 +47,15 @@ A data frame with variables:
     \item{total_Var}{Total number of students with full Varicella vaccination course.
     Full course defined as 1 or more doses of varicella at or after child's
     first birthday, unadjusted for history of varicella illness.}
+    \item{percent_Up_to_Date}{The percent of up to date students. See \code{total_Up_to_Date}.}
+    \item{percent_Conditional}{The percent of students that are conditional. See \code{total_Conditional}.}
+    \item{percent_PME}{The percent of students with PME. See \code{total_PME}.}
+    \item{percent_PBE}{The percent of students with PBE. See \code{total_PBE}.}
+    \item{percent_DTP}{The percent of students vaccinated with DTP. See \code{total_DTP}.}
+    \item{percent_Polio}{The percent of students vaccinated against polio. See \code{total_Polio}.}
+    \item{percent_MMR}{The percent of students vaccinated with MMR. See \code{total_MMR}.}
+    \item{percent_HepB}{The percent of students vaccinated against HepB. See \code{total_HepB}.}
+    \item{percent_Var}{The percent of students vaccinated against varicella. See \code{total_Var}.}
     \item{Year}{The year that the data was collected. School years represented as
     \code{XXXX-YYYY} are coded as being collected in year \code{YYYY}.}
   }

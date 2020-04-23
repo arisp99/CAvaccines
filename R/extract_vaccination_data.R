@@ -80,7 +80,9 @@ extract_vaccination <- function(file, year, rows, sheet){
   # We now take the school level vaccination data and create county level
   # vaccination data. For each measurment, we find the total number of kids per
   # school for that measurment, and then sum those numbers to get county level
-  # data.
+  # data. We then divide the total columns by the total enrollment in order to
+  # get percent of students. Lastly, we rename these percent columns into a
+  # more clear form.
   county_yr <- school_yr %>%
     dplyr::group_by(.data$Jurisdiction) %>%
     dplyr::summarize(
