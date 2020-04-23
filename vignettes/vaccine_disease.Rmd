@@ -51,18 +51,14 @@ that have a PME, and the percent of students that have a PBE.
 
 ```{r}
 # Graphs are for the year 2017
-percents <- dplyr::filter(county_vaccination, Year == "2017")
-percents <- dplyr::select(percents, Jurisdiction, total_Enrollment, total_DTP, total_Up_to_Date, total_PME, total_PBE)
+to_map <- dplyr::filter(county_vaccination, Year == "2017") %>%
+  dplyr::select(Jurisdiction, percent_DTP, percent_Up_to_Date, percent_PME, percent_PBE) %>%
+  dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
 
-percents$total_DTP        <- with(percents, total_DTP/total_Enrollment*100) 
-percents$total_Up_to_Date <- with(percents, total_Up_to_Date/total_Enrollment*100) 
-percents$total_PME        <- with(percents, total_PME/total_Enrollment*100) 
-percents$total_PBE        <- with(percents, total_PBE/total_Enrollment*100) 
-
-map_plot(percents, "total_DTP", "Total DTP Vaccinations")
-map_plot(percents, "total_Up_to_Date", "Total Up to Date")
-map_plot(percents, "total_PME", "Total PME")
-map_plot(percents, "total_PBE", "Total PBE")
+map_plot(to_map, "percent_DTP", "Total DTP Vaccinations")
+map_plot(to_map, "percent_Up_to_Date", "Total Up to Date")
+map_plot(to_map, "percent_PME", "Total PME")
+map_plot(to_map, "percent_PBE", "Total PBE")
 ```
 
 ```{r}
