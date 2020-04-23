@@ -93,7 +93,9 @@ extract_vaccination <- function(file, year, rows, sheet){
       total_Polio       = sum(.data$Polio/100*.data$Enrollment),
       total_MMR         = sum(.data$MMR/100*.data$Enrollment),
       total_HepB        = sum(.data$HepB/100*.data$Enrollment),
-      total_Var         = sum(.data$Var/100*.data$Enrollment))
+      total_Var         = sum(.data$Var/100*.data$Enrollment)) %>%
+    dplyr::mutate_at(dplyr::vars(-.data$Jurisdiction, -.data$total_Enrollment), list(avg = ~./total_Enrollment)) %>%
+    dplyr::rename_at(dplyr::vars(dplyr::contains("_avg")), list(~paste("percent", gsub("total_|_avg", "", .), sep="_")))
 
   # Save as dataframe and add year
   county_yr <- as.data.frame(county_yr)
