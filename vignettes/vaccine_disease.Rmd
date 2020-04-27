@@ -59,19 +59,29 @@ map_plot(to_map, "percent_DTP", "Total DTP Vaccinations")
 map_plot(to_map, "percent_Up_to_Date", "Total Up to Date")
 map_plot(to_map, "percent_PME", "Total PME")
 map_plot(to_map, "percent_PBE", "Total PBE")
+
+density_plot(county_vaccination, "percent_DTP")
+length(county_vaccination$percent_DTP)
+sum(county_vaccination$percent_DTP <= 0.81)
 ```
 
 ```{r}
 omit <- na.omit(pertussis)
-
-ggplot(omit, aes(x = Year, y = Cases)) + geom_boxplot()
-ggplot(omit, aes(x = Year, y = Rates)) + geom_boxplot()
-
 means <- as.data.frame(omit %>% dplyr::group_by(Year) %>% 
                          dplyr::summarize(avg_cases = mean(Cases), avg_rates = mean(Rates)))
 
-ggplot(means, aes(x = Year, y = avg_cases, fill = avg_cases)) + geom_col() + theme(legend.position = "none")
-ggplot(means, aes(x = Year, y = avg_rates, fill = avg_rates)) + geom_col() + theme(legend.position = "none")
+ggplot(omit, aes(x = Year, y = Cases, fill = as.numeric(Year))) + 
+  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.5, color = "gray40") +
+  viridis::scale_fill_viridis() + theme(legend.position = "none")
+
+ggplot(omit, aes(x = Year, y = Rates, fill = as.numeric(Year))) + 
+  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.5, color = "gray40") +
+  viridis::scale_fill_viridis() + theme(legend.position = "none")
+
+ggplot(means, aes(x = Year, y = avg_cases, fill = avg_cases)) + geom_col() + theme(legend.position = "none") + 
+  viridis::scale_fill_viridis()
+ggplot(means, aes(x = Year, y = avg_rates, fill = avg_rates)) + geom_col() + theme(legend.position = "none") + 
+  viridis::scale_fill_viridis()
 ```
 
 # Modeling
@@ -148,6 +158,11 @@ print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
 
 
 ```{r}
+corr_data <- model_data %>% 
+  dplyr::select(-"Jurisdiction")
+summary(corr_data)
+
+
 corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
 M <- corr_mat$r
 P_mat <- corr_mat$P
