@@ -1,0 +1,158 @@
+---
+title: "WHO Data"
+author: Aris Paschalidis
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{WHO_data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CAvaccines)
+library(ggplot2)
+```
+
+## Read In Data
+```{r}
+# Population Numbers
+population_country <- suppressMessages(
+  readxl::read_excel("/Users/arisp/Desktop/population-by-country.xlsx",
+                     na = "",
+                     range = "B2:D191",
+                     col_names = FALSE))
+names(population_country) <- c("ISO_code", "Year", "Population")
+population_country$Year <- NULL
+
+# Incidence
+incidence_series <- suppressMessages(
+  readxl::read_excel("/Users/arisp/Desktop/incidence_series.xls",
+                     sheet = "Pertussis",
+                     na = "",
+                     col_names = TRUE))
+
+incidence_series <- incidence_series %>% 
+  tidyr::gather(Year, Cases, -c(WHO_REGION, ISO_code, Cname, Disease)) %>% 
+  na.omit()
+
+incidence_series$Cname <- stringr::str_remove(incidence_series$Cname, " \\(.*\\)")
+incidence_series$Cname[incidence_series$Cname == "United States of America"] <- "USA"
+incidence_series$Cname[incidence_series$Cname == "Russian Federation"] <- "Russia"
+
+incidence_series <- 
+  dplyr::left_join(incidence_series, population_country, by = "ISO_code") %>% 
+  dplyr::mutate(Cases = Cases / Population)
+str(incidence_series)
+
+# Coverage
+coverage_series <- suppressMessages(
+  readxl::read_excel("/Users/arisp/Desktop/Numeric_coverage_series.xls",
+                     sheet = "world_coverage",
+                     na = "",
+                     range = readxl::cell_cols("A:G"),
+                     col_names = TRUE))
+
+coverage_series <- coverage_series %>% 
+  dplyr::mutate(Percent_covrage = Percent_covrage/ 100) %>%
+  tidyr::spread(Vaccine, Percent_covrage)
+
+coverage_series$Year <- as.character(coverage_series$Year)
+coverage_series <- coverage_series[, which(colMeans(!is.na(coverage_series)) > 0.40)]
+
+# Fixing country names
+coverage_series$Cname <- stringr::str_remove(coverage_series$Cname, " \\(.*\\)")
+coverage_series$Cname[coverage_series$Cname == "Brunei Darussalam"] <- "Brunei"
+coverage_series$Cname[coverage_series$Cname == "Cabo Verde"] <- "Cape Verde"
+coverage_series$Cname[coverage_series$Cname == "Congo"] <- "Republic of Congo"
+coverage_series$Cname[coverage_series$Cname == "Côte d'Ivoire"] <- "Ivory Coast"
+coverage_series$Cname[coverage_series$Cname == "Democratic People's Republic of Korea"] <- "North Korea"
+coverage_series$Cname[coverage_series$Cname == "Lao People's Democratic Republic"] <- "Laos"
+coverage_series$Cname[coverage_series$Cname == "North Macedonia"] <- "Macedonia"
+coverage_series$Cname[coverage_series$Cname == "Republic of Moldova"] <- "Moldova"
+coverage_series$Cname[coverage_series$Cname == "Syrian Arab Republic"] <- "Syria"
+coverage_series$Cname[coverage_series$Cname == "United Republic of Tanzania"] <- "Tanzania"
+coverage_series$Cname[coverage_series$Cname == "Viet Nam"] <- "Vietnam"
+coverage_series$Cname[coverage_series$Cname == "United States of America"] <- "USA"
+coverage_series$Cname[coverage_series$Cname == "Russian Federation"] <- "Russia"
+summary(coverage_series)
+```
+
+```{r}
+to_map <- coverage_series %>% 
+  dplyr::group_by(Cname) %>% 
+  dplyr::summarize(
+      BCG      = mean(BCG*100, na.rm = T),
+      DTP1     = mean(DTP1*100, na.rm = T),
+      DTP3     = mean(DTP3*100, na.rm = T),
+      HepB3    = mean(HepB3*100, na.rm = T),
+      MCV1     = mean(MCV1*100, na.rm = T),
+      TT2plus  = mean(TT2plus*100, na.rm = T))
+
+# Determine min and max values
+min_v = DescTools::RoundTo(min(to_map$DTP3, na.rm = T), 5)
+max_v = DescTools::RoundTo(max(to_map$DTP3, na.rm = T), 5)
+diff = max_v - min_v
+
+# Based on min and max values, determine optimal breaks. We stipulate
+# that there shoud be at least five breaks
+if (diff <= 5){
+  breaks = seq(min_v, max_v, 1)
+} else if (diff <= 25){
+  breaks = seq(min_v, max_v, 5)
+} else {
+  breaks = seq(min_v, max_v, 10)
+}
+
+countries = ggplot2::map_data("world")
+# setdiff(to_map$Cname, countries$region)
+# setdiff(countries$region, to_map$Cname)
+  
+# Combine mapping data and our data
+world_map = dplyr::left_join(countries, to_map, by = c("region" = "Cname"))
+
+# Create map
+ggplot(data = world_map, aes(x = .data$long, y = .data$lat, group = .data$group, fill = DTP3)) +
+  coord_quickmap() + theme_void() +
+  geom_polygon(color = "black") +
+  viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(min_v, max_v)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 15),
+      legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
+  labs(title = "Plot of DTP Rates in the World", fill = "Rates (%)")
+```
+
+```{r}
+incidence_series_2015 <- incidence_series %>% dplyr::filter(Year == "2015")
+coverage_series_2015 <- coverage_series %>% 
+  dplyr::filter(Year == "2015")
+coverage_series_2015$TT2plus <- NULL
+
+combined_2015 <- 
+  dplyr::full_join(incidence_series_2015, coverage_series_2015, 
+                   by = c("WHO_REGION", "ISO_code", "Cname", "Year")) %>% 
+  dplyr::select(c(Cases, BCG, DTP1, DTP3, HepB3, MCV1, Pol3)) %>% 
+  na.omit() %>% 
+  scale() %>% 
+  as.data.frame()
+
+str(combined_2015)
+
+set.seed(0)
+t_sample = caTools::sample.split(combined_2015$Cases, SplitRatio = 0.7)
+t_train = subset(combined_2015, t_sample == TRUE)
+t_test  = subset(combined_2015, t_sample == FALSE)
+
+lm <- stats::lm(Cases ~., data = t_train)
+summary(lm)
+
+predict_lm <- lm %>% stats::predict(t_test)
+print(paste("Test R2 Linear:", round(caret::R2(predict_lm, t_test$Cases), 4)))
+```
+
