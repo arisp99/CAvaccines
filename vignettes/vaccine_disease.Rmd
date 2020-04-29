@@ -134,6 +134,36 @@ map_plot(pertussiss_to_map,
          trans = scales::pseudo_log_trans(base = 2))
 ```
 
+We below present a way to create a gif from the data for all years. This is a 
+superior approach to only plotting one year as was done in the previous code
+chunk. Note that in order to run the below code chunk, some packages may first 
+need to be installed.
+
+```{r}
+# Create dataset
+pertussiss_animated <- pertussis %>% na.omit()
+pertussiss_animated$Year <- as.numeric(as.character(pertussiss_animated$Year))
+
+# Animate data
+if (!requireNamespace("gganimate", quietly = TRUE)) {
+  warning('Package \"gganimate\" needed in order to animate the figures. 
+          Please install it. Note that user may also need to install the 
+          following: "transformr", "gifski", "png".',
+    call. = FALSE)
+} else {
+  # Animate data
+  animated <- map_plot(pertussiss_animated,
+                      "Rates",
+                      breaks = c(0, 2, 4, 8, 16, 32, 64, 128),
+                      title = "Rates Per 100,000 Individuals",
+                      fill = "Rates",
+                      trans = scales::pseudo_log_trans(base = 2)) +
+    gganimate::transition_time(as.integer(Year)) +
+    labs(title = "Rates Per 100,000 Individuals in {frame_time}")
+  
+  gganimate::animate(animated, fps = 5)
+  # gganimate::anim_save("Animated Rates By Year.gif")
+}
 ```
 
 #### Vaccination Rates
