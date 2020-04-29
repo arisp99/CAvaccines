@@ -21,20 +21,21 @@ library(CAvaccines)
 library(ggplot2)
 ```
 
-# Read in Data
-The first step in any analysis we want to perform is to first read in our datasets.
-For this analysis, we will utilize two datasets, both found in the Data/ folder
-of this project: county_vaccination, and pertussis. Both of these of these datasets
-are documented in the associated help files, but we summarize here for convenience.
-Before continuing with this vignette, we strongly encourage readers to examine the
-documentation for each dataset, if they have not already.
+# The Data
+The first step in any analysis we want to perform is to first read in our 
+datasets. For this analysis, we will utilize two datasets, both found in the 
+Data/ folder of this project: county_vaccination, and pertussis. Both these 
+datasets are documented in the associated help files, but we summarize here for
+convenience. Before continuing with this vignette, we strongly encourage readers
+to examine the documentation for each dataset, if they have not already.
 
 * `county_vaccination` is a dataset containing information about vaccination rates
 for each CA county for the years of 2008-2017.
 * `pertussis` is a dataset containing all pertussis cases, arranged by county, from
 the years of 2008-2017 in the state of California.
 
-One approach to examining our data is to study the variable names. 
+We first print out the variable names so that readers are aware of the variables
+in each dataset.
 
 ```{r}
 # We print the names of each dataset
@@ -42,12 +43,105 @@ names(county_vaccination)
 names(pertussis)
 ```
 
-Another, likely more useful option, is to visualize our data. To do this, we 
-will create plots of our variables. We first start by creating maps of CA counties
-and shading the counties according to a specific measurement. The following set
-of graphs shows the percent of students with DTP vaccinations, the percent
-of students that are up to date on their vaccinations, the percent of students
-that have a PME, and the percent of students that have a PBE.
+## Plotting The Data
+
+One particularly useful way to understand our data is to visualize it. To do 
+this, we will create various plots of our variables. 
+
+#### Incidence
+We first start with our `pertussis` dataset. One way to visualise our data is
+to create boxplots of the cases and rates every year.
+
+```{r}
+# Remove missing data
+pertussis_omit <- na.omit(pertussis)
+
+# Cases
+ggplot(pertussis_omit, aes(x = Year, y = Cases, fill = as.numeric(Year))) + 
+  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.5, color = "gray40") +
+  viridis::scale_fill_viridis() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 15),
+        axis.title = element_text(size = 10)) +
+  labs(title = "Boxplot of Cases By Year", x = "Year", y = "Cases")
+
+# Rates
+ggplot(pertussis_omit, aes(x = Year, y = Rates, fill = as.numeric(Year))) + 
+  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.4, color = "gray40") +
+  viridis::scale_fill_viridis() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 15),
+        axis.title = element_text(size = 10)) +
+  labs(title = "Boxplot of Rates By Year", x = "Year", y = "Rates")
+
+# Code below is a method to remove outliers if deemed needed
+# ylim_cases = grDevices::boxplot.stats(pertussis_omit$Rates)$stats[c(1, 5)]
+# ylim_cases = quantile(pertussis_omit$Rates, c(0, 1))
+# include_cases + coord_cartesian(ylim = ylim_cases)
+```
+
+As is clear by the above graphs, in some counties the rate and cases are very
+high and thus the data is hard to interpret. In order to combat this, instead
+of plotting the cases and rates for every county, we could simply find the 
+average number each year. This approach is shown below, 
+
+```{r}
+# Create dataframe
+pertussis_means <- pertussis_omit %>% 
+  dplyr::group_by(Year) %>% 
+  dplyr::summarize(
+    avg_cases = mean(Cases), 
+    avg_rates = mean(Rates))
+
+# Plot average for cases and rates
+ggplot(pertussis_means, aes(x = Year, y = avg_cases, fill = avg_cases)) + 
+  geom_col() + viridis::scale_fill_viridis() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 15),
+        axis.title = element_text(size = 10)) +
+  labs(title = "Histogram of Average Cases By Year", 
+       x = "Year", 
+       y = "Average Cases")
+
+ggplot(pertussis_means, aes(x = Year, y = avg_rates, fill = avg_rates)) +
+  geom_col() + viridis::scale_fill_viridis() + 
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5, size = 15),
+        axis.title = element_text(size = 10)) +
+  labs(title = "Histogram of Average Rates By Year", 
+       x = "Year", 
+       y = "Average Rates")
+```
+
+To further understand what our data looks like for any particular year, we will
+construct a map of the rates of infection for a typical year: 2013.
+
+```{r}
+# Select year 2013
+pertussiss_to_map <- pertussis %>% 
+  dplyr::filter(Year == "2013") 
+
+# Map with all data
+suppressMessages(map_plot(pertussiss_to_map, 
+                          "Rates", 
+                          "Rates Per 100,000 Individuals") +
+  scale_fill_gradient())
+
+# Map excluding two outliers of 72 and 75. This makes it easier to read
+map_plot(pertussiss_to_map %>% dplyr::filter(Rates < 25), 
+         "Rates", 
+         "Rates Per 100,000 Individuals In 2013",
+         "Rates")
+```
+
+#### Vaccination Rates
+
+We now move on to our `county_vaccination` dataset. We first start by creating 
+maps of CA counties and shading the counties according to a specific 
+measurement. The following set of graphs shows the percent of students with DTP 
+vaccinations, the percent of students that are up to date on their vaccinations,
+the percent of students that have a PME, and the percent of students that have 
+a PBE.
 
 ```{r}
 # Graphs are for the year 2017
@@ -60,28 +154,9 @@ map_plot(to_map, "percent_Up_to_Date", "Total Up to Date")
 map_plot(to_map, "percent_PME", "Total PME")
 map_plot(to_map, "percent_PBE", "Total PBE")
 
-density_plot(county_vaccination, "percent_DTP")
-length(county_vaccination$percent_DTP)
-sum(county_vaccination$percent_DTP <= 0.81)
-```
-
-```{r}
-omit <- na.omit(pertussis)
-means <- as.data.frame(omit %>% dplyr::group_by(Year) %>% 
-                         dplyr::summarize(avg_cases = mean(Cases), avg_rates = mean(Rates)))
-
-ggplot(omit, aes(x = Year, y = Cases, fill = as.numeric(Year))) + 
-  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.5, color = "gray40") +
-  viridis::scale_fill_viridis() + theme(legend.position = "none")
-
-ggplot(omit, aes(x = Year, y = Rates, fill = as.numeric(Year))) + 
-  geom_boxplot(outlier.shape = NA) + geom_jitter(size = 0.5, color = "gray40") +
-  viridis::scale_fill_viridis() + theme(legend.position = "none")
-
-ggplot(means, aes(x = Year, y = avg_cases, fill = avg_cases)) + geom_col() + theme(legend.position = "none") + 
-  viridis::scale_fill_viridis()
-ggplot(means, aes(x = Year, y = avg_rates, fill = avg_rates)) + geom_col() + theme(legend.position = "none") + 
-  viridis::scale_fill_viridis()
+# density_plot(county_vaccination, "percent_DTP")
+# length(county_vaccination$percent_DTP)
+# sum(county_vaccination$percent_DTP <= 0.81)
 ```
 
 # Modeling
