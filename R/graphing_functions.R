@@ -76,13 +76,6 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #' @export
 map_plot <- function(data, variable, breaks = NULL,
                      title = NULL, fill = "Rates (%)", trans = NULL){
-  # # If specify breaks or limits and not the other, error message prints that
-  # # must specify both parameters or none.
-  # if ((is.null(breaks) & !is.null(limits)) |
-  #     (!is.null(breaks) & is.null(limits))){
-  #   stop("Only specified breaks or limits. To specify one parameter, must
-  #   specify the other parameter.")
-  # }
 
   # Determine breaks if breaks parameters is NULL
   if (is.null(breaks)){
