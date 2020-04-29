@@ -18,7 +18,8 @@ county_2016 <- extract_vaccination(paste(path_to_data, "2015-16CAKindergartenDat
 county_2017 <- extract_vaccination(paste(path_to_data, "2016-17KindergartenData.xlsx",   sep = "/"), "2017",  c(5, 6919), "Enrollment 20 or More")
 
 # We do not have incidence data on 2018 cases
-# county_2018 <- extract_vaccination(paste(path_to_data, "2017-18CA_KindergartenDataLetter.xlsx", sep = "/"), "2018",  c(5, 6735), "Enrollment 20 or More")
+# yr_2018 <- system.file("extdata", "2017-18CA_KindergartenDataLetter.xlsx", package = "CAvaccines")
+# county_2018 <- extract_vaccination(yr_2018, "2018",  c(5, 6735), "Enrollment 20 or More")
 
 # Combine all the datasets together
 county_vaccination <-
