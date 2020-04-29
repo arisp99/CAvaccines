@@ -2,19 +2,17 @@
 #'
 #' @description Extract county level vaccination data.
 #'
-#' @param file The file that contains the data to be extracted
+#' @param path The path to the file that contains the data to be extracted
 #' @param year The year that the data was collected
 #' @param rows The minimum and maximum rows to be extracted
 #' @param sheet The sheet that contains the data in the excel file
 #' @return Returns the county level vaccination dataframe
 #'
 #' @export
-extract_vaccination <- function(file, year, rows, sheet){
-  yr <- system.file("extdata", file, package = "CAvaccines")
-
+extract_vaccination <- function(path, year, rows, sheet){
   # Extract relevant data from each file
   yr <- suppressMessages(
-    readxl::read_excel(yr,
+    readxl::read_excel(path,
                        sheet = sheet,
                        range = readxl::cell_rows(rows),
                        na = ".",

@@ -4,10 +4,10 @@
 \alias{extract_vaccination}
 \title{Extract county level vaccination data}
 \usage{
-extract_vaccination(file, year, rows, sheet)
+extract_vaccination(path, year, rows, sheet)
 }
 \arguments{
-\item{file}{The file that contains the data to be extracted}
+\item{path}{The path to the file that contains the data to be extracted}
 
 \item{year}{The year that the data was collected}
 
