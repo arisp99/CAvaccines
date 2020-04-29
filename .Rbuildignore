@@ -3,3 +3,4 @@
 ^data-raw$
 ^\.travis\.yml$
 ^README\.Rmd$
+^vignettes/WHO_data\.Rmd$
