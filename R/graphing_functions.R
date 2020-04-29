@@ -68,9 +68,10 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
 #' @param title The title of the figure. By default set to \code{NULL}
+#' @param fill The fill of the figure. By default set to \code{Rates (\%)}
 #'
 #' @export
-map_plot <- function(data, variable, title = NULL){
+map_plot <- function(data, variable, title = NULL, fill = "Rates (%)"){
   # Determine min and max values
   min_v = DescTools::RoundTo(min(data[[variable]]), 5)
   max_v = DescTools::RoundTo(max(data[[variable]]), 5)
@@ -101,7 +102,7 @@ map_plot <- function(data, variable, title = NULL){
     viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(min_v, max_v)) +
     theme(plot.title = element_text(hjust = 0.5, size = 15),
           legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
-    labs(title = title, fill = "Rates (%)")
+    labs(title = title, fill = fill)
 
   return(ca_base)
 }

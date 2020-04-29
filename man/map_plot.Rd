@@ -4,7 +4,7 @@
 \alias{map_plot}
 \title{Plot California counties}
 \usage{
-map_plot(data, variable, title = NULL)
+map_plot(data, variable, title = NULL, fill = "Rates (\%)")
 }
 \arguments{
 \item{data}{The dataset that contains the variable to be plotted}
@@ -12,6 +12,8 @@ map_plot(data, variable, title = NULL)
 \item{variable}{The variable to be plotted}
 
 \item{title}{The title of the figure. By default set to \code{NULL}}
+
+\item{fill}{The fill of the figure. By default set to \code{Rates (\%)}}
 }
 \description{
 Plots the California counties, filled according to a particular
