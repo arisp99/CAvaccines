@@ -83,7 +83,7 @@ map_plot <- function(data, variable, title = NULL){
   } else if (diff <= 25){
     breaks = seq(min_v, max_v, 5)
   } else {
-    breaks = seq(min_v, max_v, 10)
+    breaks = seq(min_v, max_v, DescTools::RoundTo(diff/5, 5))
   }
 
   # Get county data for CA
