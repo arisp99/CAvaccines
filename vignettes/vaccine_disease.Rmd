@@ -114,26 +114,26 @@ ggplot(pertussis_means, aes(x = Year, y = avg_rates, fill = avg_rates)) +
 ```
 
 To further understand what our data looks like for any particular year, we will
-construct a map of the rates of infection for a typical year: 2013.
+construct a map of the rates of infection for a typical year: 2013. Since the
+data from 2013 spans a large range, we will tranform the shading of the map by
+log base 2. This will make it easier to inteprept. Note that when we transform
+the data, we do not actually change the values of our data. The data remains the
+same, but we change the way data points are colored.
 
 ```{r}
 # Select year 2013
 pertussiss_to_map <- pertussis %>% 
   dplyr::filter(Year == "2013") 
 
-# Map with all data
+# Map with all data from 2013
 map_plot(pertussiss_to_map,
          "Rates",
          breaks = c(0, 2, 4, 8, 16, 32, 64, 128),
          title = "Rates Per 100,000 Individuals In 2013",
          fill = "Rates",
          trans = scales::pseudo_log_trans(base = 2))
+```
 
-# Map excluding two outliers of 72 and 75. This makes it easier to read
-map_plot(pertussiss_to_map %>% dplyr::filter(Rates < 25), 
-         "Rates", 
-         title = "Rates Per 100,000 Individuals In 2013",
-         fill = "Rates")
 ```
 
 #### Vaccination Rates
