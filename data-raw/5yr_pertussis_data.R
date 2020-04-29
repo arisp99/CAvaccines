@@ -37,8 +37,7 @@ pertussis$Jurisdiction <- tolower(pertussis$Jurisdiction)
 pertussis <- pertussis %>%
   tidyr::gather(Year, Number, -Jurisdiction) %>%
   tidyr::separate(Year, c("Year", "Type")) %>%
-  tidyr::spread(Type, Number) %>%
-  dplyr::filter(Year != "2014")
+  tidyr::spread(Type, Number)
 
 # Convert pertussis to a dataframe and convert year into a factor
 pertussis <- as.data.frame(pertussis)
