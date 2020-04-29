@@ -33,7 +33,6 @@ Imports:
     viridis
 Suggests:
     gganimate,
-    gifski,
     knitr,
     png,
     readxl,
