@@ -115,8 +115,8 @@ ggplot(pertussis_means, aes(x = Year, y = avg_rates, fill = avg_rates)) +
 
 To further understand what our data looks like for any particular year, we will
 construct a map of the rates of infection for a typical year: 2013. Since the
-data from 2013 spans a large range, we will tranform the shading of the map by
-log base 2. This will make it easier to inteprept. Note that when we transform
+data from 2013 spans a large range, we will transform the shading of the map by
+log base 2. This will make it easier to interpret. Note that when we transform
 the data, we do not actually change the values of our data. The data remains the
 same, but we change the way data points are colored.
 
