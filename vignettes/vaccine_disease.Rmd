@@ -175,21 +175,78 @@ vaccinations, the percent of students that are up to date on their vaccinations,
 the percent of students that have a PME, and the percent of students that have 
 a PBE.
 
+One option for visualizing these variables is to look at a specific year. Below,
+we look at the year 2013.
+
 ```{r}
-# Graphs are for the year 2017
-to_map <- dplyr::filter(county_vaccination, Year == "2017") %>%
+# Graphs are for the year 2013
+vac_to_map <- dplyr::filter(county_vaccination, Year == "2013") %>% 
   dplyr::select(Jurisdiction, percent_DTP, percent_Up_to_Date, percent_PME, percent_PBE) %>%
   dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
 
-map_plot(to_map, "percent_DTP", title = "Total DTP Vaccinations")
-map_plot(to_map, "percent_Up_to_Date", title = "Total Up to Date")
-map_plot(to_map, "percent_PME", title = "Total PME")
-map_plot(to_map, "percent_PBE", title = "Total PBE")
-
-# density_plot(county_vaccination, "percent_DTP")
-# length(county_vaccination$percent_DTP)
-# sum(county_vaccination$percent_DTP <= 0.81)
+map_plot(vac_to_map, "percent_Up_to_Date", title = "Up to Date")
+map_plot(vac_to_map, "percent_PME", title = "PME")
+map_plot(vac_to_map, "percent_PBE", title = "PBE")
+map_plot(vac_to_map, "percent_DTP", title = "DTP Vaccinations")
 ```
+
+As we did with our `pertussis` dataset, however, we can also animate out maps.
+
+```{r}
+# Create dataset
+vac_animated <- county_vaccination %>%
+  dplyr::select(Jurisdiction, Year, 
+                percent_DTP, percent_Up_to_Date, percent_PME, percent_PBE) %>%
+  dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
+vac_animated$Year <- as.numeric(as.character(vac_animated$Year))
+
+str(vac_animated)
+
+# Animate data
+if (!requireNamespace("gganimate", quietly = TRUE)) {
+  warning('Package \"gganimate\" needed in order to animate the figures. 
+          Please install it. Note that user may also need to install the 
+          following: "transformr", "gifski", "png".',
+    call. = FALSE)
+} else {
+  # Animate up to data data
+  animated <- map_plot(vac_animated,
+                      "percent_Up_to_Date") +
+    gganimate::transition_time(as.integer(Year)) +
+    labs(title = "Up to Date in {frame_time}")
+  
+  gganimate::animate(animated, fps = 5)
+  # gganimate::anim_save("Animated percent_Up_to_Date")
+  
+  # Animate PME data
+  animated <- map_plot(vac_animated,
+                      "percent_PME") +
+    gganimate::transition_time(as.integer(Year)) +
+    labs(title = "PME in {frame_time}")
+  
+  gganimate::animate(animated, fps = 5)
+  # gganimate::anim_save("Animated percent_PME.gif")
+  
+  # Animate PBE data
+  animated <- map_plot(vac_animated,
+                      "percent_PBE") +
+    gganimate::transition_time(as.integer(Year)) +
+    labs(title = "PBE in {frame_time}")
+  
+  gganimate::animate(animated, fps = 5)
+  # gganimate::anim_save("Animated percent_PBE.gif")
+  
+  # Animate DTP data
+  animated <- map_plot(vac_animated,
+                      "percent_DTP") +
+    gganimate::transition_time(as.integer(Year)) +
+    labs(title = "DTP in {frame_time}")
+  
+  gganimate::animate(animated, fps = 5)
+  # gganimate::anim_save("Animated percent_DTP.gif")
+}
+```
+
 
 # Modeling
 We first set up data for modeling.
