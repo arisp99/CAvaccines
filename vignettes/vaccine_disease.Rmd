@@ -122,16 +122,18 @@ pertussiss_to_map <- pertussis %>%
   dplyr::filter(Year == "2013") 
 
 # Map with all data
-suppressMessages(map_plot(pertussiss_to_map, 
-                          "Rates", 
-                          "Rates Per 100,000 Individuals") +
-  scale_fill_gradient())
+map_plot(pertussiss_to_map,
+         "Rates",
+         breaks = c(0, 2, 4, 8, 16, 32, 64, 128),
+         title = "Rates Per 100,000 Individuals In 2013",
+         fill = "Rates",
+         trans = scales::pseudo_log_trans(base = 2))
 
 # Map excluding two outliers of 72 and 75. This makes it easier to read
 map_plot(pertussiss_to_map %>% dplyr::filter(Rates < 25), 
          "Rates", 
-         "Rates Per 100,000 Individuals In 2013",
-         "Rates")
+         title = "Rates Per 100,000 Individuals In 2013",
+         fill = "Rates")
 ```
 
 #### Vaccination Rates
@@ -149,10 +151,10 @@ to_map <- dplyr::filter(county_vaccination, Year == "2017") %>%
   dplyr::select(Jurisdiction, percent_DTP, percent_Up_to_Date, percent_PME, percent_PBE) %>%
   dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
 
-map_plot(to_map, "percent_DTP", "Total DTP Vaccinations")
-map_plot(to_map, "percent_Up_to_Date", "Total Up to Date")
-map_plot(to_map, "percent_PME", "Total PME")
-map_plot(to_map, "percent_PBE", "Total PBE")
+map_plot(to_map, "percent_DTP", title = "Total DTP Vaccinations")
+map_plot(to_map, "percent_Up_to_Date", title = "Total Up to Date")
+map_plot(to_map, "percent_PME", title = "Total PME")
+map_plot(to_map, "percent_PBE", title = "Total PBE")
 
 # density_plot(county_vaccination, "percent_DTP")
 # length(county_vaccination$percent_DTP)
