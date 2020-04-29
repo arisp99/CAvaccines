@@ -76,7 +76,15 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #' @export
 map_plot <- function(data, variable, breaks = NULL,
                      title = NULL, fill = "Rates (%)", trans = NULL){
-  # Determine breaks if breaks parameter is NULL
+  # # If specify breaks or limits and not the other, error message prints that
+  # # must specify both parameters or none.
+  # if ((is.null(breaks) & !is.null(limits)) |
+  #     (!is.null(breaks) & is.null(limits))){
+  #   stop("Only specified breaks or limits. To specify one parameter, must
+  #   specify the other parameter.")
+  # }
+
+  # Determine breaks if breaks parameters is NULL
   if (is.null(breaks)){
     # Determine min and max values
     min_v = DescTools::RoundTo(min(data[[variable]]), 5)
@@ -91,6 +99,13 @@ map_plot <- function(data, variable, breaks = NULL,
       breaks = seq(min_v, max_v, 5)
     } else {
       breaks = seq(min_v, max_v, DescTools::RoundTo(diff/5, 5))
+    }
+
+    # If the last break point is not the maximum value, add in a final break
+    # point.
+    last_break = breaks[length(breaks)]
+    if (last_break < max_v){
+      breaks = c(breaks, last_break + DescTools::RoundTo(diff/5, 5))
     }
   }
 
