@@ -67,24 +67,28 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #'
 #' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
+#' @param breaks The breaks for the legend. By defauly set to \code{NULL}
 #' @param title The title of the figure. By default set to \code{NULL}
 #' @param fill The fill of the figure. By default set to \code{Rates (\%)}
 #'
 #' @export
-map_plot <- function(data, variable, title = NULL, fill = "Rates (%)"){
-  # Determine min and max values
-  min_v = DescTools::RoundTo(min(data[[variable]]), 5)
-  max_v = DescTools::RoundTo(max(data[[variable]]), 5)
-  diff = max_v - min_v
+map_plot <- function(data, variable, breaks = NULL, title = NULL, fill = "Rates (%)"){
+  # Determine breaks if breaks parameter is NULL
+  if (is.null(breaks)){
+    # Determine min and max values
+    min_v = DescTools::RoundTo(min(data[[variable]]), 5)
+    max_v = DescTools::RoundTo(max(data[[variable]]), 5)
+    diff = max_v - min_v
 
-  # Based on min and max values, determine optimal breaks. We stipulate
-  # that there shoud be at least five breaks
-  if (diff <= 5){
-    breaks = seq(min_v, max_v, 1)
-  } else if (diff <= 25){
-    breaks = seq(min_v, max_v, 5)
-  } else {
-    breaks = seq(min_v, max_v, DescTools::RoundTo(diff/5, 5))
+    # Based on min and max values, determine optimal breaks. We stipulate
+    # that there shoud be at least five breaks
+    if (diff <= 5){
+      breaks = seq(min_v, max_v, 1)
+    } else if (diff <= 25){
+      breaks = seq(min_v, max_v, 5)
+    } else {
+      breaks = seq(min_v, max_v, DescTools::RoundTo(diff/5, 5))
+    }
   }
 
   # Get county data for CA
@@ -99,7 +103,7 @@ map_plot <- function(data, variable, title = NULL, fill = "Rates (%)"){
                    aes(x = .data$long, y = .data$lat, group = .data$group, fill = eval(parse(text = variable)))) +
     coord_quickmap() + theme_void() +
     geom_polygon(color = "black") +
-    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(min_v, max_v)) +
+    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(breaks[1], breaks[length(breaks)])) +
     theme(plot.title = element_text(hjust = 0.5, size = 15),
           legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
     labs(title = title, fill = fill)

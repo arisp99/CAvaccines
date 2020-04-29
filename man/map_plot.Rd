@@ -4,12 +4,14 @@
 \alias{map_plot}
 \title{Plot California counties}
 \usage{
-map_plot(data, variable, title = NULL, fill = "Rates (\%)")
+map_plot(data, variable, breaks = NULL, title = NULL, fill = "Rates (\%)")
 }
 \arguments{
 \item{data}{The dataset that contains the variable to be plotted}
 
 \item{variable}{The variable to be plotted}
+
+\item{breaks}{The breaks for the legend. By defauly set to \code{NULL}}
 
 \item{title}{The title of the figure. By default set to \code{NULL}}
 
