@@ -80,8 +80,8 @@ map_plot <- function(data, variable, breaks = NULL,
   # Determine breaks if breaks parameters is NULL
   if (is.null(breaks)){
     # Determine min and max values
-    min_v = DescTools::RoundTo(min(data[[variable]]), 5)
-    max_v = DescTools::RoundTo(max(data[[variable]]), 5)
+    min_v = DescTools::RoundTo(min(data[[variable]]), 5, floor)
+    max_v = DescTools::RoundTo(max(data[[variable]]), 5, ceiling)
     diff = max_v - min_v
 
     # Based on min and max values, determine optimal breaks. We stipulate
