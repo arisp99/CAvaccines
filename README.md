@@ -37,10 +37,10 @@ More specifically, the script that is entitled: `vaccine_disease.Rmd`.
 
 With the recent COVID-19 pandemic, a large number of scientists and
 companies have rushed to help the world. On the forefront of everyone’s
-mind is how can a vaccine be develped to combat the pandemic. Vaccine
+mind is how can a vaccine be developed to combat the pandemic. Vaccines
 play a huge role in the world and are essential to the fight against
 infectious diseases. It has been seen, time and time again, that vaccine
-protect against deadly pathogens and save lives. However, disese
+protect against deadly pathogens and save lives. However, disease
 outbreaks still occur. The reasons for these outbreaks are not fully
 understood.
 

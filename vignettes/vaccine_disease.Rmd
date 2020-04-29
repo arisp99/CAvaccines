@@ -49,7 +49,7 @@ One particularly useful way to understand our data is to visualize it. To do
 this, we will create various plots of our variables. 
 
 #### Incidence
-We first start with our `pertussis` dataset. One way to visualise our data is
+We first start with our `pertussis` dataset. One way to visualize our data is
 to create boxplots of the cases and rates every year.
 
 ```{r}
