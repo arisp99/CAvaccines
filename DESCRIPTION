@@ -31,12 +31,17 @@ Imports:
     stats,
     viridis
 Suggests:
+    gganimate,
+    gifski,
     knitr,
+    png,
     readxl,
     rmarkdown,
+    scales,
     spelling,
     stringr,
-    tidyr
+    tidyr,
+    transformr
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Language: en-US
