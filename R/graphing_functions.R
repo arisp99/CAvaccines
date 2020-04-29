@@ -67,12 +67,15 @@ density_plot <- function(data, variable, title = NULL, xlab = NULL, ylab = "Dens
 #'
 #' @param data The dataset that contains the variable to be plotted
 #' @param variable The variable to be plotted
-#' @param breaks The breaks for the legend. By defauly set to \code{NULL}
+#' @param breaks The breaks for the legend. By default set to \code{NULL}
 #' @param title The title of the figure. By default set to \code{NULL}
 #' @param fill The fill of the figure. By default set to \code{Rates (\%)}
+#' @param trans The transformation to be applied to the data. By default set
+#' to \code{NULL}
 #'
 #' @export
-map_plot <- function(data, variable, breaks = NULL, title = NULL, fill = "Rates (%)"){
+map_plot <- function(data, variable, breaks = NULL,
+                     title = NULL, fill = "Rates (%)", trans = NULL){
   # Determine breaks if breaks parameter is NULL
   if (is.null(breaks)){
     # Determine min and max values
@@ -103,10 +106,25 @@ map_plot <- function(data, variable, breaks = NULL, title = NULL, fill = "Rates 
                    aes(x = .data$long, y = .data$lat, group = .data$group, fill = eval(parse(text = variable)))) +
     coord_quickmap() + theme_void() +
     geom_polygon(color = "black") +
-    viridis::scale_fill_viridis(option = "viridis", breaks = breaks, limits = c(breaks[1], breaks[length(breaks)])) +
     theme(plot.title = element_text(hjust = 0.5, size = 15),
           legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
     labs(title = title, fill = fill)
+
+  # Determine whether a transformation will be applied to the data
+  if (is.null(trans)){
+    # Default case, when trans = NULL
+    ca_base = ca_base +
+      viridis::scale_fill_viridis(option = "viridis",
+                                  breaks = breaks,
+                                  limits = c(breaks[1], breaks[length(breaks)]))
+  } else {
+    # Applying a transformation
+    ca_base = ca_base +
+      viridis::scale_fill_viridis(option = "viridis",
+                                  trans  = trans,
+                                  breaks = breaks,
+                                  limits = c(breaks[1], breaks[length(breaks)]))
+  }
 
   return(ca_base)
 }

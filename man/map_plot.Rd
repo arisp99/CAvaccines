@@ -4,18 +4,28 @@
 \alias{map_plot}
 \title{Plot California counties}
 \usage{
-map_plot(data, variable, breaks = NULL, title = NULL, fill = "Rates (\%)")
+map_plot(
+  data,
+  variable,
+  breaks = NULL,
+  title = NULL,
+  fill = "Rates (\%)",
+  trans = NULL
+)
 }
 \arguments{
 \item{data}{The dataset that contains the variable to be plotted}
 
 \item{variable}{The variable to be plotted}
 
-\item{breaks}{The breaks for the legend. By defauly set to \code{NULL}}
+\item{breaks}{The breaks for the legend. By default set to \code{NULL}}
 
 \item{title}{The title of the figure. By default set to \code{NULL}}
 
 \item{fill}{The fill of the figure. By default set to \code{Rates (\%)}}
+
+\item{trans}{The transformation to be applied to the data. By default set
+to \code{NULL}}
 }
 \description{
 Plots the California counties, filled according to a particular
