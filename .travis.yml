@@ -8,3 +8,4 @@ addons:
     packages:
       - libudunits2-dev
       - cargo
+      - libgdal-dev
