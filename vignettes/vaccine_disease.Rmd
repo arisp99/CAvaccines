@@ -256,8 +256,6 @@ We first set up data for modeling.
 model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year")) %>% 
   dplyr::filter(Year %notin% c("2010")) %>%
   dplyr::filter(Jurisdiction != "totals")
-
-summary(model_data)
 ```
 
 By total numbers and cases.
@@ -268,8 +266,6 @@ scaled_total_data <- model_data %>%
   dplyr::mutate_if(is.numeric, scale) %>% 
   as.data.frame() %>% na.omit()
 
-# fit <- forecast::tslm(Cases ~ total_Up_to_Date+total_Conditional+total_PME+total_PBE+total_DTP+total_Polio+total_MMR+total_HepB+total_Var+trend, data=ts(scaled_total_data))
-# summary(fit)
 
 # set.seed(0)
 t_sample = caTools::sample.split(scaled_total_data$Cases, SplitRatio = 0.7)
@@ -282,12 +278,6 @@ summary(lm)
 predict_lm <- lm %>% stats::predict(t_test)
 print(paste("Test R2 Linear:", round(caret::R2(predict_lm, t_test$Cases), 4)))
 
-cart <- rpart::rpart(Cases ~., data = t_train)
-# prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
-
-predict_cart <- cart %>% stats::predict(t_test)
-confMat <- table(t_test$Cases, predict_cart)
-print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
 ```
 
 By percents and rates
@@ -311,13 +301,6 @@ summary(lm)
 
 predict_lm <- lm %>% stats::predict(p_test)
 print(paste("Test R2 Linear:", round(caret::R2(predict_lm, p_test$Rates), 4)))
-
-cart <- rpart::rpart(Rates ~., data = p_train)
-# prune_cart <- rpart::prune(cart, cp = cart$cptable[which.min(cart$cptable[,"xerror"]),"CP"])
-
-predict_cart <- cart %>% stats::predict(p_test)
-confMat <- table(p_test$Rates, predict_cart)
-print(paste("Test Accuracy CART:", round(sum(diag(confMat))/sum(confMat), 4)))
 ```
 
 
