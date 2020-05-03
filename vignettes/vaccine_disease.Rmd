@@ -266,18 +266,22 @@ scaled_total_data <- model_data %>%
   dplyr::mutate_if(is.numeric, scale) %>% 
   as.data.frame() %>% na.omit()
 
+summary(scaled_total_data)
 
-# set.seed(0)
-t_sample = caTools::sample.split(scaled_total_data$Cases, SplitRatio = 0.7)
-t_train = subset(scaled_total_data, t_sample == TRUE)
-t_test  = subset(scaled_total_data, t_sample == FALSE)
-
-lm <- stats::lm(Cases ~., data = t_train)
-summary(lm)
-
-predict_lm <- lm %>% stats::predict(t_test)
-print(paste("Test R2 Linear:", round(caret::R2(predict_lm, t_test$Cases), 4)))
-
+results_cases <- list()
+for (i in 1:1000){
+  t_sample = caTools::sample.split(scaled_total_data$Cases, SplitRatio = 0.7)
+  t_train = subset(scaled_total_data, t_sample == TRUE)
+  t_test  = subset(scaled_total_data, t_sample == FALSE)
+  
+  lm <- stats::lm(Cases ~., data = t_train)
+  # summary(lm)
+  
+  predict_lm <- lm %>% stats::predict(t_test)
+  results_cases <- c(results_cases, 
+                     round(caret::R2(predict_lm, t_test$Cases), 4))
+}
+print(paste("Average Test R2 Linear:", mean(unlist(results_cases))))
 ```
 
 By percents and rates
@@ -291,16 +295,20 @@ scaled_percent_data <- model_data %>%
 # scaled_percent_data$Rates <- scaled_percent_data$Rates/1000
 summary(scaled_percent_data)
 
-# set.seed(0)
-p_sample = caTools::sample.split(scaled_percent_data$Rates, SplitRatio = 0.8)
-p_train = subset(scaled_percent_data, p_sample == TRUE)
-p_test  = subset(scaled_percent_data, p_sample == FALSE)
-
-lm <- stats::lm(Rates ~., data = p_train)
-summary(lm)
-
-predict_lm <- lm %>% stats::predict(p_test)
-print(paste("Test R2 Linear:", round(caret::R2(predict_lm, p_test$Rates), 4)))
+results_percent <- list()
+for (i in 1:1000){
+  p_sample = caTools::sample.split(scaled_percent_data$Rates, SplitRatio = 0.7)
+  p_train = subset(scaled_percent_data, p_sample == TRUE)
+  p_test  = subset(scaled_percent_data, p_sample == FALSE)
+  
+  lm <- stats::lm(Rates ~., data = p_train)
+  # summary(lm)
+  
+  predict_lm <- lm %>% stats::predict(p_test)
+  results_percent <- c(results_percent, 
+                       round(caret::R2(predict_lm, p_test$Rates), 4))
+}
+print(paste("Average Test R2 Linear:", mean(unlist(results_percent))))
 ```
 
 
