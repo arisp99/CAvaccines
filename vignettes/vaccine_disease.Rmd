@@ -254,7 +254,6 @@ We first set up data for modeling.
 `%notin%` <- Negate(`%in%`)
 
 model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year")) %>% 
-  dplyr::filter(Year %notin% c("2010")) %>%
   dplyr::filter(Jurisdiction != "totals")
 ```
 
@@ -263,7 +262,7 @@ By total numbers and cases.
 scaled_total_data <- model_data %>% 
   dplyr::select(-one_of(c("Jurisdiction", "Year", "Rates"))) %>%
   dplyr::select(-contains("percent_")) %>%
-  dplyr::mutate_if(is.numeric, scale) %>% 
+  dplyr::mutate_at(dplyr::vars(-Cases), scale) %>% 
   as.data.frame() %>% na.omit()
 
 summary(scaled_total_data)
@@ -275,7 +274,7 @@ for (i in 1:1000){
   t_test  = subset(scaled_total_data, t_sample == FALSE)
   
   lm <- stats::lm(Cases ~., data = t_train)
-  # summary(lm)
+  # print(summary(lm))
   
   predict_lm <- lm %>% stats::predict(t_test)
   results_cases <- c(results_cases, 
@@ -316,7 +315,6 @@ print(paste("Average Test R2 Linear:", mean(unlist(results_percent))))
 corr_data <- model_data %>% 
   dplyr::select(-"Jurisdiction")
 summary(corr_data)
-
 
 corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
 M <- corr_mat$r

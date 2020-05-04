@@ -27,7 +27,6 @@ Imports:
     ggsci,
     RColorBrewer,
     rlang,
-    rpart,
     scales,
     stats,
     viridis
@@ -37,6 +36,7 @@ Suggests:
     png,
     readxl,
     rmarkdown,
+    rpart,
     spelling,
     stringr,
     tidyr,
