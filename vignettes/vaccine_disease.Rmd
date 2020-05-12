@@ -190,7 +190,7 @@ map_plot(vac_to_map, "percent_PBE", title = "PBE")
 map_plot(vac_to_map, "percent_DTP", title = "DTP Vaccinations")
 ```
 
-As we did with our `pertussis` dataset, however, we can also animate out maps.
+As we did with our `pertussis` dataset, however, we can also animate maps of CA.
 
 ```{r}
 # Create dataset
@@ -249,16 +249,32 @@ if (!requireNamespace("gganimate", quietly = TRUE)) {
 
 
 # Modeling
-We first set up data for modeling.
+
+The next stage in our analysis is to model the data. More specifically, we seek
+to evaluate the relationship between vaccination rates and disease incidence. In
+order to model our data, however, we must first set up the data. In the 
+following code chunk, we combine our two datasets.
+
 ```{r}
+# Define a not in operator
 `%notin%` <- Negate(`%in%`)
 
+# Combine the data sets and remove the total county
 model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year")) %>% 
   dplyr::filter(Jurisdiction != "totals")
 ```
 
-By total numbers and cases.
+Recall that in our data there are both rates of disease and cases of disease.
+Likewise, there is vaccination data that represents totals, and other 
+vaccination data that represents percents. In modeling our data, we can look at
+combinations of these different types of data. We can either look at the total
+number for vaccination rates and the total number of cases or we can look at
+the percent of vaccination rates and the rates of disease.
+
+We first look at the number of total cases and the total vaccination rates.
+
 ```{r}
+# Isolate variables, scale the independent variables, and remove missing data
 scaled_total_data <- model_data %>% 
   dplyr::select(-one_of(c("Jurisdiction", "Year", "Rates"))) %>%
   dplyr::select(-contains("percent_")) %>%
@@ -267,6 +283,7 @@ scaled_total_data <- model_data %>%
 
 summary(scaled_total_data)
 
+# Run a linear regression several times and take the average R2
 results_cases <- list()
 for (i in 1:1000){
   t_sample = caTools::sample.split(scaled_total_data$Cases, SplitRatio = 0.7)
@@ -283,8 +300,10 @@ for (i in 1:1000){
 print(paste("Average Test R2 Linear:", mean(unlist(results_cases))))
 ```
 
-By percents and rates
+We next look at the rates of cases and the percent of vaccination rates.
+
 ```{r}
+# Isolate variables and remove missing data
 scaled_percent_data <- model_data %>% 
   dplyr::select(-one_of(c("Jurisdiction", "Year", "Cases"))) %>%
   dplyr::select(-contains("total_")) %>%
@@ -294,6 +313,7 @@ scaled_percent_data <- model_data %>%
 # scaled_percent_data$Rates <- scaled_percent_data$Rates/1000
 summary(scaled_percent_data)
 
+# Run a linear regression several times and take the average R2
 results_percent <- list()
 for (i in 1:1000){
   p_sample = caTools::sample.split(scaled_percent_data$Rates, SplitRatio = 0.7)
@@ -310,16 +330,23 @@ for (i in 1:1000){
 print(paste("Average Test R2 Linear:", mean(unlist(results_percent))))
 ```
 
+After running the above models, it can be seen that the R2 value is not 
+particularly high. There may be many reasons for this, but one might be that the
+data is highly correlated. Below, we therefore plot a correlation plot of the
+independent variables.
 
 ```{r}
+# Set up data
 corr_data <- model_data %>% 
   dplyr::select(-"Jurisdiction")
 summary(corr_data)
 
+# Create correlation matrix
 corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
 M <- corr_mat$r
 P_mat <- corr_mat$P
 
+# Plot the correlation values
 corrplot::corrplot(M, method = "color", col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
   addCoef.col = "black",
   tl.col = "black", tl.srt = 50,tl.cex = 0.60,
