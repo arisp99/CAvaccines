@@ -24,8 +24,14 @@ library(ggplot2)
 ## Read In Data
 ```{r}
 # Population Numbers
+population_file <- system.file(
+  "extdata",
+  "population-by-country.xlsx",
+  package = "CAvaccines"
+)
+
 population_country <- suppressMessages(
-  readxl::read_excel("/Users/arisp/Desktop/population-by-country.xlsx",
+  readxl::read_excel(population_file,
                      na = "",
                      range = "B2:D191",
                      col_names = FALSE))
@@ -33,8 +39,14 @@ names(population_country) <- c("ISO_code", "Year", "Population")
 population_country$Year <- NULL
 
 # Incidence
+incidence_file <- system.file(
+  "extdata",
+  "incidence_series.xls",
+  package = "CAvaccines"
+)
+
 incidence_series <- suppressMessages(
-  readxl::read_excel("/Users/arisp/Desktop/incidence_series.xls",
+  readxl::read_excel(incidence_file,
                      sheet = "Pertussis",
                      na = "",
                      col_names = TRUE))
@@ -53,8 +65,14 @@ incidence_series <-
 str(incidence_series)
 
 # Coverage
+coverage_file <- system.file(
+  "extdata",
+  "Numeric_coverage_series.xls",
+  package = "CAvaccines"
+)
+
 coverage_series <- suppressMessages(
-  readxl::read_excel("/Users/arisp/Desktop/Numeric_coverage_series.xls",
+  readxl::read_excel(coverage_file,
                      sheet = "world_coverage",
                      na = "",
                      range = readxl::cell_cols("A:G"),

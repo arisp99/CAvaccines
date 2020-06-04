@@ -8,7 +8,7 @@
 [![Build
 Status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
 <!-- badges: end -->
 
@@ -71,9 +71,3 @@ summarize the datasets below.
     county, from the years of 2008-2017 in the state of California. The
     dataset contains the number of cases and the number of cases per
     100,000 people for every county and every year.
-
-## Development
-
-Please note that this package is still under development and therefore
-there may be missing features. This `README` will be updated as the
-package is developed accordingly.
