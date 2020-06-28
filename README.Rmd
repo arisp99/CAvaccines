@@ -14,9 +14,26 @@ knitr::opts_chunk$set(
 ```
 
 
-# CAvaccines
+# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/logo/logo.png' align="right" height="139" /></a>
+
+```{r code for logo, eval = F, include = F}
+## Paste this at line 190 in the vaccine_disease.Rmd file
+
+a <- map_plot(vac_to_map, "percent_DTP", title = "DTP Vaccinations")
+
+a <- a + theme_void() + hexSticker::theme_transparent() + theme(legend.position = "none") + labs(title = NULL)
+ggsave("logo_background.png")
+
+hexSticker::sticker(a, package="CAvaccines", 
+        filename="logo.png", 
+        s_x = 1, s_y = 0.8, s_width = 1.6, s_height = 1.2,
+        p_size = 6.5, p_y = 1.5, p_color = "#8dd544ff", h_color = "#8dd544ff",
+        h_fill = "#46307cff")
+```
+
 
 <!-- badges: start -->
+[![R build status](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
 [![Build Status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()

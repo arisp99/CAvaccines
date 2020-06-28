@@ -1,10 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CAvaccines
+# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/logo/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
+[![R build
+status](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
 [![Build
 Status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
 [![Lifecycle:
