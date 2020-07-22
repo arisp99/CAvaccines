@@ -5,3 +5,6 @@
 ^README\.Rmd$
 ^vignettes/WHO_data\.Rmd$
 ^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

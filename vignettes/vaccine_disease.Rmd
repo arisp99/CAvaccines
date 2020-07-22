@@ -1,7 +1,5 @@
 ---
 title: "Vaccines and Infectious Disease"
-author: Aris Paschalidis
-date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vaccines and Infectious Disease}
@@ -12,8 +10,16 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 7
 )
+
+animate = TRUE
+fps = 10
+
+# To save the animated plots, can use
+# gganimate::anim_save("Animated Rates By Year.gif")
 ```
 
 ```{r setup}
@@ -21,7 +27,6 @@ library(CAvaccines)
 library(ggplot2)
 ```
 
-# The Data
 The first step in any analysis we want to perform is to first read in our 
 datasets. For this analysis, we will utilize two datasets, both found in the 
 Data/ folder of this project: county_vaccination, and pertussis. Both these 
@@ -29,10 +34,10 @@ datasets are documented in the associated help files, but we summarize here for
 convenience. Before continuing with this vignette, we strongly encourage readers
 to examine the documentation for each dataset, if they have not already.
 
-* `county_vaccination` is a dataset containing information about vaccination rates
-for each CA county for the years of 2008-2017.
-* `pertussis` is a dataset containing all pertussis cases, arranged by county, from
-the years of 2008-2017 in the state of California.
+* `county_vaccination` is a dataset containing information about vaccination 
+rates for each CA county for the years of 2008-2017.
+* `pertussis` is a dataset containing all pertussis cases, arranged by county, 
+from the years of 2008-2017 in the state of California.
 
 We first print out the variable names so that readers are aware of the variables
 in each dataset.
@@ -43,12 +48,12 @@ names(county_vaccination)
 names(pertussis)
 ```
 
-## Plotting The Data
+## Data Visualization
 
 One particularly useful way to understand our data is to visualize it. To do 
 this, we will create various plots of our variables. 
 
-#### Incidence
+### Incidence
 We first start with our `pertussis` dataset. One way to visualize our data is
 to create boxplots of the cases and rates every year.
 
@@ -91,7 +96,7 @@ pertussis_means <- pertussis_omit %>%
   dplyr::group_by(Year) %>% 
   dplyr::summarize(
     avg_cases = mean(Cases), 
-    avg_rates = mean(Rates))
+    avg_rates = mean(Rates), .groups = "drop_last")
 
 # Plot average for cases and rates
 ggplot(pertussis_means, aes(x = Year, y = avg_cases, fill = avg_cases)) + 
@@ -139,34 +144,25 @@ superior approach to only plotting one year as was done in the previous code
 chunk. Note that in order to run the below code chunk, some packages may first 
 need to be installed.
 
-```{r}
+```{r, eval = animate}
 # Create dataset
 pertussiss_animated <- pertussis %>% na.omit()
 pertussiss_animated$Year <- as.numeric(as.character(pertussiss_animated$Year))
 
 # Animate data
-if (!requireNamespace("gganimate", quietly = TRUE)) {
-  warning('Package \"gganimate\" needed in order to animate the figures. 
-          Please install it. Note that user may also need to install the 
-          following: "transformr", "gifski", "png".',
-    call. = FALSE)
-} else {
-  # Animate data
-  animated <- map_plot(pertussiss_animated,
-                      "Rates",
-                      breaks = c(0, 2, 4, 8, 16, 32, 64, 128),
-                      title = "Rates Per 100,000 Individuals",
-                      fill = "Rates",
-                      trans = scales::pseudo_log_trans(base = 2)) +
-    gganimate::transition_time(as.integer(Year)) +
-    labs(title = "Rates Per 100,000 Individuals in {frame_time}")
+animated <- map_plot(pertussiss_animated,
+                    "Rates",
+                    breaks = c(0, 2, 4, 8, 16, 32, 64, 128),
+                    title = "Rates Per 100,000 Individuals",
+                    fill = "Rates",
+                    trans = scales::pseudo_log_trans(base = 2)) +
+  gganimate::transition_time(as.integer(Year)) +
+  labs(title = "Rates Per 100,000 Individuals in {frame_time}")
   
-  gganimate::animate(animated, fps = 5)
-  # gganimate::anim_save("Animated Rates By Year.gif")
-}
+gganimate::animate(animated, fps = fps)
 ```
 
-#### Vaccination Rates
+### Vaccination Rates
 
 We now move on to our `county_vaccination` dataset. We first start by creating 
 maps of CA counties and shading the counties according to a specific 
@@ -181,7 +177,8 @@ we look at the year 2013.
 ```{r}
 # Graphs are for the year 2013
 vac_to_map <- dplyr::filter(county_vaccination, Year == "2013") %>% 
-  dplyr::select(Jurisdiction, percent_DTP, percent_Up_to_Date, percent_PME, percent_PBE) %>%
+  dplyr::select(Jurisdiction, percent_DTP, percent_Up_to_Date, 
+                percent_PME, percent_PBE) %>%
   dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
 
 map_plot(vac_to_map, "percent_Up_to_Date", title = "Up to Date")
@@ -192,7 +189,7 @@ map_plot(vac_to_map, "percent_DTP", title = "DTP Vaccinations")
 
 As we did with our `pertussis` dataset, however, we can also animate maps of CA.
 
-```{r}
+```{r, eval = animate}
 # Create dataset
 vac_animated <- county_vaccination %>%
   dplyr::select(Jurisdiction, Year, 
@@ -200,55 +197,49 @@ vac_animated <- county_vaccination %>%
   dplyr::mutate_at(dplyr::vars(dplyr::contains("percent_")), ~.*100)
 vac_animated$Year <- as.numeric(as.character(vac_animated$Year))
 
-str(vac_animated)
+# Animate up to data data
+animated <- map_plot(vac_animated,
+                    "percent_Up_to_Date") +
+  gganimate::transition_time(as.integer(Year)) +
+  labs(title = "Up to Date in {frame_time}")
 
-# Animate data
-if (!requireNamespace("gganimate", quietly = TRUE)) {
-  warning('Package \"gganimate\" needed in order to animate the figures. 
-          Please install it. Note that user may also need to install the 
-          following: "transformr", "gifski", "png".',
-    call. = FALSE)
-} else {
-  # Animate up to data data
-  animated <- map_plot(vac_animated,
-                      "percent_Up_to_Date") +
-    gganimate::transition_time(as.integer(Year)) +
-    labs(title = "Up to Date in {frame_time}")
-  
-  gganimate::animate(animated, fps = 5)
-  # gganimate::anim_save("Animated percent_Up_to_Date")
-  
-  # Animate PME data
-  animated <- map_plot(vac_animated,
-                      "percent_PME") +
-    gganimate::transition_time(as.integer(Year)) +
-    labs(title = "PME in {frame_time}")
-  
-  gganimate::animate(animated, fps = 5)
-  # gganimate::anim_save("Animated percent_PME.gif")
-  
-  # Animate PBE data
-  animated <- map_plot(vac_animated,
-                      "percent_PBE") +
-    gganimate::transition_time(as.integer(Year)) +
-    labs(title = "PBE in {frame_time}")
-  
-  gganimate::animate(animated, fps = 5)
-  # gganimate::anim_save("Animated percent_PBE.gif")
-  
-  # Animate DTP data
-  animated <- map_plot(vac_animated,
-                      "percent_DTP") +
-    gganimate::transition_time(as.integer(Year)) +
-    labs(title = "DTP in {frame_time}")
-  
-  gganimate::animate(animated, fps = 5)
-  # gganimate::anim_save("Animated percent_DTP.gif")
-}
+gganimate::animate(animated, fps = fps)
 ```
 
 
-# Modeling
+```{r, eval = animate}
+# Animate PME data
+animated <- map_plot(vac_animated,
+                    "percent_PME") +
+  gganimate::transition_time(as.integer(Year)) +
+  labs(title = "PME in {frame_time}")
+
+gganimate::animate(animated, fps = fps)
+```
+
+
+```{r, eval = animate}
+# Animate PBE data
+animated <- map_plot(vac_animated,
+                    "percent_PBE") +
+  gganimate::transition_time(as.integer(Year)) +
+  labs(title = "PBE in {frame_time}")
+
+gganimate::animate(animated, fps = fps)
+```
+
+
+```{r, eval = animate}
+# Animate DTP data
+animated <- map_plot(vac_animated,
+                    "percent_DTP") +
+  gganimate::transition_time(as.integer(Year)) +
+  labs(title = "DTP in {frame_time}")
+
+gganimate::animate(animated, fps = fps)
+```
+
+## Modeling
 
 The next stage in our analysis is to model the data. More specifically, we seek
 to evaluate the relationship between vaccination rates and disease incidence. In
@@ -260,7 +251,8 @@ following code chunk, we combine our two datasets.
 `%notin%` <- Negate(`%in%`)
 
 # Combine the data sets and remove the total county
-model_data  <- dplyr::full_join(county_vaccination, pertussis, by = c("Jurisdiction", "Year")) %>% 
+model_data  <- dplyr::full_join(county_vaccination, pertussis, 
+                                by = c("Jurisdiction", "Year")) %>% 
   dplyr::filter(Jurisdiction != "totals")
 ```
 
@@ -280,8 +272,6 @@ scaled_total_data <- model_data %>%
   dplyr::select(-contains("percent_")) %>%
   dplyr::mutate_at(dplyr::vars(-Cases), scale) %>% 
   as.data.frame() %>% na.omit()
-
-summary(scaled_total_data)
 
 # Run a linear regression several times and take the average R2
 results_cases <- list()
@@ -311,7 +301,6 @@ scaled_percent_data <- model_data %>%
   as.data.frame() %>% na.omit()
 
 # scaled_percent_data$Rates <- scaled_percent_data$Rates/1000
-summary(scaled_percent_data)
 
 # Run a linear regression several times and take the average R2
 results_percent <- list()
@@ -330,6 +319,8 @@ for (i in 1:1000){
 print(paste("Average Test R2 Linear:", mean(unlist(results_percent))))
 ```
 
+### Correlation
+
 After running the above models, it can be seen that the R2 value is not 
 particularly high. There may be many reasons for this, but one might be that the
 data is highly correlated. Below, we therefore plot a correlation plot of the
@@ -339,7 +330,6 @@ independent variables.
 # Set up data
 corr_data <- model_data %>% 
   dplyr::select(-"Jurisdiction")
-summary(corr_data)
 
 # Create correlation matrix
 corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
@@ -347,7 +337,8 @@ M <- corr_mat$r
 P_mat <- corr_mat$P
 
 # Plot the correlation values
-corrplot::corrplot(M, method = "color", col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
+corrplot::corrplot(M, method = "color", 
+                   col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
   addCoef.col = "black",
   tl.col = "black", tl.srt = 50,tl.cex = 0.60,
   p.mat = P_mat, sig.level = 0.05, pch.cex = 5,

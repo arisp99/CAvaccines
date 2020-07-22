@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/logo/logo.png' align="right" height="139" /></a>
+# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -30,10 +30,10 @@ devtools::install_github("arisp99/CAvaccines")
 
 ## Usage
 
-In order to run the main script, please refer to the vignettes folder.
-More specifically, the script that is entitled: `vaccine_disease.Rmd`.
+In order to run the main script, please refer to the included vignettes.
+These can also be found under the Articles tab in the website.
 
-## Details
+### Details
 
 #### Motivation
 

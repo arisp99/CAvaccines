@@ -1,10 +1,8 @@
 ---
 title: "WHO Data"
-author: Aris Paschalidis
-date: "`r format(Sys.time(), '%B %d, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{WHO_data}
+  %\VignetteIndexEntry{WHO Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,12 +14,12 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Data
 ```{r setup}
 library(CAvaccines)
 library(ggplot2)
 ```
 
-## Read In Data
 ```{r}
 # Population Numbers
 population_file <- system.file(
@@ -100,8 +98,9 @@ coverage_series$Cname[coverage_series$Cname == "United Republic of Tanzania"] <-
 coverage_series$Cname[coverage_series$Cname == "Viet Nam"] <- "Vietnam"
 coverage_series$Cname[coverage_series$Cname == "United States of America"] <- "USA"
 coverage_series$Cname[coverage_series$Cname == "Russian Federation"] <- "Russia"
-summary(coverage_series)
 ```
+
+## Visualize
 
 ```{r}
 to_map <- coverage_series %>% 
@@ -145,6 +144,8 @@ ggplot(data = world_map, aes(x = .data$long, y = .data$lat, group = .data$group,
       legend.title = element_text(vjust = 2, size = 10), legend.text = element_text(size = 10)) +
   labs(title = "Plot of DTP Rates in the World", fill = "Rates (%)")
 ```
+
+## Modeling
 
 ```{r}
 incidence_series_2015 <- incidence_series %>% dplyr::filter(Year == "2015")

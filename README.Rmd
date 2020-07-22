@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 
-# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/logo/logo.png' align="right" height="139" /></a>
+# CAvaccines <a href='https://github.com/arisp99/CAvaccines'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 ```{r code for logo, eval = F, include = F}
 ## Paste this at line 190 in the vaccine_disease.Rmd file
@@ -51,10 +51,10 @@ devtools::install_github("arisp99/CAvaccines")
 ```
 
 ## Usage
-In order to run the main script, please refer to the vignettes folder. 
-More specifically, the script that is entitled: `vaccine_disease.Rmd`. 
+In order to run the main script, please refer to the included vignettes. These
+can also be found under the Articles tab in the website. 
 
-## Details
+### Details
 #### Motivation
 With the recent COVID-19 pandemic, a large number of scientists and companies
 have rushed to help the world. On the forefront of everyone's mind is how can

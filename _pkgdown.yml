@@ -1,0 +1,34 @@
+url: https://arisp99.github.io/CAvaccines/
+
+template:
+  params:
+    bootswatch: flatly
+
+reference:
+  - title: Datasets
+    desc: >
+      Documentation for the datasets
+    contents:
+    - pertussis
+    - county_vaccination
+    - extract_vaccination
+  - title: Visualize
+    desc: >
+      Plot the results
+    contents:
+    - matches("plot")
+
+navbar:
+  title: CAvaccines
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: Reference
+    href: reference/index.html
+  - text: Articles
+    menu:
+    - text: Vaccines and Infectious Disease
+      href: articles/vaccine_disease.html
+    - text: WHO Data
+      href: articles/WHO_data.html
