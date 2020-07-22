@@ -1,0 +1,11 @@
+pandoc: 2.7.3
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  WHO_data: WHO_data.html
+  vaccine_disease: vaccine_disease.html
+last_built: 2020-07-22T11:29Z
+urls:
+  reference: https://arisp99.github.io/CAvaccines//reference
+  article: https://arisp99.github.io/CAvaccines//articles
+
