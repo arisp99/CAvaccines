@@ -8,7 +8,7 @@ Authors@R: person(given = "Aris",
              email = "aris.paschalidis@gmail.com",
              comment = c(ORCID = "0000-0003-2247-1885"))
 Maintainer: Aris Paschalidis <aris.paschalidis@gmail.com>
-URL: https://github.com/arisp99/Cavaccines
+URL: https://arisp99.github.io/CAvaccines/, https://github.com/arisp99/Cavaccines
 BugReports: https://github.com/arisp99/Cavaccines/issues 
 Description: Final project for BIOL 1600: Introduction to Vaccines. In this
   project, I examine the vaccination rates of CA students and the number of
