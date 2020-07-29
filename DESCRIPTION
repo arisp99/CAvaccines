@@ -28,6 +28,7 @@ Imports:
     maps,
     ggplot2,
     ggsci,
+    gifski,
     RColorBrewer,
     rlang,
     scales,
