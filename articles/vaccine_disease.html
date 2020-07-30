@@ -211,9 +211,8 @@
   <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">Year</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Rates Per 100,000 Individuals in {frame_time}"</span>)
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)
-<span class="co">#&gt; Warning: No renderer available. Please install the gifski, av, or magick package</span>
-<span class="co">#&gt; to create animated output</span></pre></body></html></div>
+<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)</pre></body></html></div>
+<p><img src="vaccine_disease_files/figure-html/unnamed-chunk-6-1.gif"><!-- --></p>
 </div>
 <div id="vaccination-rates" class="section level3">
 <h3 class="hasAnchor">
@@ -248,36 +247,32 @@
   <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">Year</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Up to Date in {frame_time}"</span>)
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)
-<span class="co">#&gt; Warning: No renderer available. Please install the gifski, av, or magick package</span>
-<span class="co">#&gt; to create animated output</span></pre></body></html></div>
+<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)</pre></body></html></div>
+<p><img src="vaccine_disease_files/figure-html/unnamed-chunk-8-1.gif"><!-- --></p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># Animate PME data</span>
 <span class="no">animated</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/map_plot.html">map_plot</a></span>(<span class="no">vac_animated</span>,
                     <span class="st">"percent_PME"</span>) +
   <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">Year</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"PME in {frame_time}"</span>)
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)
-<span class="co">#&gt; Warning: No renderer available. Please install the gifski, av, or magick package</span>
-<span class="co">#&gt; to create animated output</span></pre></body></html></div>
+<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)</pre></body></html></div>
+<p><img src="vaccine_disease_files/figure-html/unnamed-chunk-9-1.gif"><!-- --></p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="co"># Animate PBE data</span>
 <span class="no">animated</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/map_plot.html">map_plot</a></span>(<span class="no">vac_animated</span>,
                     <span class="st">"percent_PBE"</span>) +
   <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">Year</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"PBE in {frame_time}"</span>)
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)
-<span class="co">#&gt; Warning: No renderer available. Please install the gifski, av, or magick package</span>
-<span class="co">#&gt; to create animated output</span></pre></body></html></div>
+<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)</pre></body></html></div>
+<p><img src="vaccine_disease_files/figure-html/unnamed-chunk-10-1.gif"><!-- --></p>
 <div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="co"># Animate DTP data</span>
 <span class="no">animated</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/map_plot.html">map_plot</a></span>(<span class="no">vac_animated</span>,
                     <span class="st">"percent_DTP"</span>) +
   <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span>(<span class="no">Year</span>)) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"DTP in {frame_time}"</span>)
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)
-<span class="co">#&gt; Warning: No renderer available. Please install the gifski, av, or magick package</span>
-<span class="co">#&gt; to create animated output</span></pre></body></html></div>
+<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">animated</span>, <span class="kw">fps</span> <span class="kw">=</span> <span class="no">fps</span>)</pre></body></html></div>
+<p><img src="vaccine_disease_files/figure-html/unnamed-chunk-11-1.gif"><!-- --></p>
 </div>
 </div>
 <div id="modeling" class="section level2">
@@ -315,7 +310,7 @@
                      <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span>(<span class="no">predict_lm</span>, <span class="no">t_test</span>$<span class="no">Cases</span>), <span class="fl">4</span>))
 }
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Average Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">results_cases</span>))))
-<span class="co">#&gt; [1] "Average Test R2 Linear: 0.4202957"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "Average Test R2 Linear: 0.4250446"</span></pre></body></html></div>
 <p>We next look at the rates of cases and the percent of vaccination rates.</p>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="co"># Isolate variables and remove missing data</span>
 <span class="no">scaled_percent_data</span> <span class="kw">&lt;-</span> <span class="no">model_data</span> <span class="kw">%&gt;%</span>
@@ -341,7 +336,7 @@
                        <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span>(<span class="no">predict_lm</span>, <span class="no">p_test</span>$<span class="no">Rates</span>), <span class="fl">4</span>))
 }
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Average Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">results_percent</span>))))
-<span class="co">#&gt; [1] "Average Test R2 Linear: 0.0190044"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "Average Test R2 Linear: 0.0190992"</span></pre></body></html></div>
 <div id="correlation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#correlation" class="anchor"></a>Correlation</h3>
