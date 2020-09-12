@@ -10,16 +10,27 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 7
 )
 ```
 
-## Data
+
 ```{r setup}
 library(CAvaccines)
 library(ggplot2)
 ```
 
+This article serves to examine the relationship between worldwide pertussis
+cases and worldwide DTP cases. The dataset we will utilize comes from the World
+Health Organization (WHO) and can be found online.
+
+## Data
+In order to extract all the data we need, we will need to utilize multiple files
+found in the extdata folder of this package. The first dataset, 
+`population_country`, contains the number of individuals in each country around 
+the globe.
 ```{r}
 # Population Numbers
 population_file <- system.file(
@@ -35,7 +46,11 @@ population_country <- suppressMessages(
                      col_names = FALSE))
 names(population_country) <- c("ISO_code", "Year", "Population")
 population_country$Year <- NULL
+```
 
+The second dataset, `incidence_series`, contains the number of pertussis cases
+each year from 1980 till 2018 across the world.
+```{r}
 # Incidence
 incidence_file <- system.file(
   "extdata",
@@ -53,15 +68,24 @@ incidence_series <- incidence_series %>%
   tidyr::gather(Year, Cases, -c(WHO_REGION, ISO_code, Cname, Disease)) %>% 
   na.omit()
 
+# Adjust several country names. In particular, several country names have the
+# characters "(the)" appended to the end of the name. We remove such characters
+# from the end of the country name. In addition, we change the names of USA and
+# Russia.
 incidence_series$Cname <- stringr::str_remove(incidence_series$Cname, " \\(.*\\)")
 incidence_series$Cname[incidence_series$Cname == "United States of America"] <- "USA"
 incidence_series$Cname[incidence_series$Cname == "Russian Federation"] <- "Russia"
 
+# Combine incidence data with population count data
 incidence_series <- 
   dplyr::left_join(incidence_series, population_country, by = "ISO_code") %>% 
   dplyr::mutate(Cases = Cases / Population)
-str(incidence_series)
+```
 
+Lastly, the third dataset we will combine, `coverage_series`, contains
+information regarding vaccination coverage rates across the globe for the years
+1966-2018.
+```{r}
 # Coverage
 coverage_file <- system.file(
   "extdata",
@@ -76,10 +100,15 @@ coverage_series <- suppressMessages(
                      range = readxl::cell_cols("A:G"),
                      col_names = TRUE))
 
-coverage_series <- coverage_series %>% 
-  dplyr::mutate(Percent_covrage = Percent_covrage/ 100) %>%
-  tidyr::spread(Vaccine, Percent_covrage)
+# Convert the expand column into multiple columns with each vaccine that was
+# administered and convert percent coverage into a decimal.
+coverage_series <- coverage_series %>%
+  dplyr::rename(Percent_coverage = Percent_covrage) %>% 
+  dplyr::mutate(Percent_coverage = Percent_coverage / 100) %>%
+  tidyr::spread(Vaccine, Percent_coverage)
 
+# Convert the year to a character and remove all variables that have more than
+# 40% missing data
 coverage_series$Year <- as.character(coverage_series$Year)
 coverage_series <- coverage_series[, which(colMeans(!is.na(coverage_series)) > 0.40)]
 
@@ -101,25 +130,29 @@ coverage_series$Cname[coverage_series$Cname == "Russian Federation"] <- "Russia"
 ```
 
 ## Visualize
-
+Now that we have read in all our data and properly formatted it, the next step 
+is to visualize our data. In order to achieve this, we will find the average
+vaccination rates in each country and then plot those on a world map.
 ```{r}
+# Finding average vaccination rates in each country
 to_map <- coverage_series %>% 
   dplyr::group_by(Cname) %>% 
-  dplyr::summarize(
-      BCG      = mean(BCG*100, na.rm = T),
-      DTP1     = mean(DTP1*100, na.rm = T),
-      DTP3     = mean(DTP3*100, na.rm = T),
-      HepB3    = mean(HepB3*100, na.rm = T),
-      MCV1     = mean(MCV1*100, na.rm = T),
-      TT2plus  = mean(TT2plus*100, na.rm = T))
+  dplyr::summarize(BCG     = mean(BCG*100, na.rm = T),
+                   DTP1    = mean(DTP1*100, na.rm = T),
+                   DTP3    = mean(DTP3*100, na.rm = T),
+                   HepB3   = mean(HepB3*100, na.rm = T),
+                   MCV1    = mean(MCV1*100, na.rm = T),
+                   TT2plus = mean(TT2plus*100, na.rm = T),
+                   .groups = "drop")
 
-# Determine min and max values
+# Determine min and max values. This will allows us to make a nicer looking plot
+# with more informative shading
 min_v = DescTools::RoundTo(min(to_map$DTP3, na.rm = T), 5)
 max_v = DescTools::RoundTo(max(to_map$DTP3, na.rm = T), 5)
 diff = max_v - min_v
 
 # Based on min and max values, determine optimal breaks. We stipulate
-# that there shoud be at least five breaks
+# that there should be at least five breaks
 if (diff <= 5){
   breaks = seq(min_v, max_v, 1)
 } else if (diff <= 25){
@@ -146,23 +179,24 @@ ggplot(data = world_map, aes(x = .data$long, y = .data$lat, group = .data$group,
 ```
 
 ## Modeling
-
+The final step is to combine everything together and try to predict the number
+of cases based on the vaccination rates worldwide. As an example, we will focus
+on the year 2015.
 ```{r}
+# Combine data
 incidence_series_2015 <- incidence_series %>% dplyr::filter(Year == "2015")
-coverage_series_2015 <- coverage_series %>% 
-  dplyr::filter(Year == "2015")
+coverage_series_2015 <- coverage_series %>% dplyr::filter(Year == "2015")
 coverage_series_2015$TT2plus <- NULL
 
-combined_2015 <- 
-  dplyr::full_join(incidence_series_2015, coverage_series_2015, 
-                   by = c("WHO_REGION", "ISO_code", "Cname", "Year")) %>% 
+combined_2015 <- dplyr::full_join(incidence_series_2015, coverage_series_2015, 
+                                  by = c("WHO_REGION", "ISO_code", 
+                                         "Cname", "Year")) %>% 
   dplyr::select(c(Cases, BCG, DTP1, DTP3, HepB3, MCV1, Pol3)) %>% 
   na.omit() %>% 
   scale() %>% 
   as.data.frame()
 
-str(combined_2015)
-
+# Run a linear regression and compute the test R2 value
 set.seed(0)
 t_sample = caTools::sample.split(combined_2015$Cases, SplitRatio = 0.7)
 t_train = subset(combined_2015, t_sample == TRUE)
