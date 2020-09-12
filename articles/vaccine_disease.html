@@ -310,7 +310,7 @@
                      <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span>(<span class="no">predict_lm</span>, <span class="no">t_test</span>$<span class="no">Cases</span>), <span class="fl">4</span>))
 }
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Average Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">results_cases</span>))))
-<span class="co">#&gt; [1] "Average Test R2 Linear: 0.4250446"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "Average Test R2 Linear: 0.4303217"</span></pre></body></html></div>
 <p>We next look at the rates of cases and the percent of vaccination rates.</p>
 <div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="co"># Isolate variables and remove missing data</span>
 <span class="no">scaled_percent_data</span> <span class="kw">&lt;-</span> <span class="no">model_data</span> <span class="kw">%&gt;%</span>
@@ -336,7 +336,7 @@
                        <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span>(<span class="no">predict_lm</span>, <span class="no">p_test</span>$<span class="no">Rates</span>), <span class="fl">4</span>))
 }
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Average Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="no">results_percent</span>))))
-<span class="co">#&gt; [1] "Average Test R2 Linear: 0.0190992"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "Average Test R2 Linear: 0.0181073"</span></pre></body></html></div>
 <div id="correlation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#correlation" class="anchor"></a>Correlation</h3>
