@@ -72,7 +72,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/arisp99/Cavaccines/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -99,173 +99,179 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">CAvaccines</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://arisp99.github.io/CAvaccines/">CAvaccines</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></code></pre></div>
 <p>This article serves to examine the relationship between worldwide pertussis cases and worldwide DTP cases. The dataset we will utilize comes from the World Health Organization (WHO) and can be found online.</p>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h2>
 <p>In order to extract all the data we need, we will need to utilize multiple files found in the extdata folder of this package. The first dataset, <code>population_country</code>, contains the number of individuals in each country around the globe.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># Population Numbers</span>
-<span class="no">population_file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Population Numbers</span>
+<span class="va">population_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span>
   <span class="st">"extdata"</span>,
   <span class="st">"population-by-country.xlsx"</span>,
-  <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CAvaccines"</span>
-)
+  package <span class="op">=</span> <span class="st">"CAvaccines"</span>
+<span class="op">)</span>
 
-<span class="no">population_country</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(
-  <span class="kw pkg">readxl</span><span class="kw ns">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span>(<span class="no">population_file</span>,
-                     <span class="kw">na</span> <span class="kw">=</span> <span class="st">""</span>,
-                     <span class="kw">range</span> <span class="kw">=</span> <span class="st">"B2:D191"</span>,
-                     <span class="kw">col_names</span> <span class="kw">=</span> <span class="fl">FALSE</span>))
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">population_country</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ISO_code"</span>, <span class="st">"Year"</span>, <span class="st">"Population"</span>)
-<span class="no">population_country</span>$<span class="no">Year</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span></pre></body></html></div>
+<span class="va">population_country</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span>
+  <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">population_file</span>,
+                     na <span class="op">=</span> <span class="st">""</span>,
+                     range <span class="op">=</span> <span class="st">"B2:D191"</span>,
+                     col_names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">population_country</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ISO_code"</span>, <span class="st">"Year"</span>, <span class="st">"Population"</span><span class="op">)</span>
+<span class="va">population_country</span><span class="op">$</span><span class="va">Year</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></code></pre></div>
 <p>The second dataset, <code>incidence_series</code>, contains the number of pertussis cases each year from 1980 till 2018 across the world.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># Incidence</span>
-<span class="no">incidence_file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Incidence</span>
+<span class="va">incidence_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span>
   <span class="st">"extdata"</span>,
   <span class="st">"incidence_series.xls"</span>,
-  <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CAvaccines"</span>
-)
+  package <span class="op">=</span> <span class="st">"CAvaccines"</span>
+<span class="op">)</span>
 
-<span class="no">incidence_series</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(
-  <span class="kw pkg">readxl</span><span class="kw ns">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span>(<span class="no">incidence_file</span>,
-                     <span class="kw">sheet</span> <span class="kw">=</span> <span class="st">"Pertussis"</span>,
-                     <span class="kw">na</span> <span class="kw">=</span> <span class="st">""</span>,
-                     <span class="kw">col_names</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<span class="va">incidence_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span>
+  <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">incidence_file</span>,
+                     sheet <span class="op">=</span> <span class="st">"Pertussis"</span>,
+                     na <span class="op">=</span> <span class="st">""</span>,
+                     col_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">incidence_series</span> <span class="kw">&lt;-</span> <span class="no">incidence_series</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">tidyr</span><span class="kw ns">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(<span class="no">Year</span>, <span class="no">Cases</span>, -<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">WHO_REGION</span>, <span class="no">ISO_code</span>, <span class="no">Cname</span>, <span class="no">Disease</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>()
+<span class="va">incidence_series</span> <span class="op">&lt;-</span> <span class="va">incidence_series</span> <span class="op">%&gt;%</span> 
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span><span class="op">(</span><span class="va">Year</span>, <span class="va">Cases</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">WHO_REGION</span>, <span class="va">ISO_code</span>, <span class="va">Cname</span>, <span class="va">Disease</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Adjust several country names. In particular, several country names have the</span>
 <span class="co"># characters "(the)" appended to the end of the name. We remove such characters</span>
 <span class="co"># from the end of the country name. In addition, we change the names of USA and</span>
 <span class="co"># Russia.</span>
-<span class="no">incidence_series</span>$<span class="no">Cname</span> <span class="kw">&lt;-</span> <span class="kw pkg">stringr</span><span class="kw ns">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span>(<span class="no">incidence_series</span>$<span class="no">Cname</span>, <span class="st">" \\(.*\\)"</span>)
-<span class="no">incidence_series</span>$<span class="no">Cname</span>[<span class="no">incidence_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"United States of America"</span>] <span class="kw">&lt;-</span> <span class="st">"USA"</span>
-<span class="no">incidence_series</span>$<span class="no">Cname</span>[<span class="no">incidence_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Russian Federation"</span>] <span class="kw">&lt;-</span> <span class="st">"Russia"</span>
+<span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span>, <span class="st">" \\(.*\\)"</span><span class="op">)</span>
+<span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"United States of America"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"USA"</span>
+<span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">incidence_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Russian Federation"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Russia"</span>
 
 <span class="co"># Combine incidence data with population count data</span>
-<span class="no">incidence_series</span> <span class="kw">&lt;-</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="no">incidence_series</span>, <span class="no">population_country</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="st">"ISO_code"</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">Cases</span> <span class="kw">=</span> <span class="no">Cases</span> / <span class="no">Population</span>)</pre></body></html></div>
+<span class="va">incidence_series</span> <span class="op">&lt;-</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">incidence_series</span>, <span class="va">population_country</span>, by <span class="op">=</span> <span class="st">"ISO_code"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Cases <span class="op">=</span> <span class="va">Cases</span> <span class="op">/</span> <span class="va">Population</span><span class="op">)</span></code></pre></div>
 <p>Lastly, the third dataset we will combine, <code>coverage_series</code>, contains information regarding vaccination coverage rates across the globe for the years 1966-2018.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># Coverage</span>
-<span class="no">coverage_file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Coverage</span>
+<span class="va">coverage_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span>
   <span class="st">"extdata"</span>,
   <span class="st">"Numeric_coverage_series.xls"</span>,
-  <span class="kw">package</span> <span class="kw">=</span> <span class="st">"CAvaccines"</span>
-)
+  package <span class="op">=</span> <span class="st">"CAvaccines"</span>
+<span class="op">)</span>
 
-<span class="no">coverage_series</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(
-  <span class="kw pkg">readxl</span><span class="kw ns">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span>(<span class="no">coverage_file</span>,
-                     <span class="kw">sheet</span> <span class="kw">=</span> <span class="st">"world_coverage"</span>,
-                     <span class="kw">na</span> <span class="kw">=</span> <span class="st">""</span>,
-                     <span class="kw">range</span> <span class="kw">=</span> <span class="kw pkg">readxl</span><span class="kw ns">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/cell-specification.html">cell_cols</a></span>(<span class="st">"A:G"</span>),
-                     <span class="kw">col_names</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+<span class="va">coverage_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span><span class="op">(</span>
+  <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="va">coverage_file</span>,
+                     sheet <span class="op">=</span> <span class="st">"world_coverage"</span>,
+                     na <span class="op">=</span> <span class="st">""</span>,
+                     range <span class="op">=</span> <span class="fu">readxl</span><span class="fu">::</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/cell-specification.html">cell_cols</a></span><span class="op">(</span><span class="st">"A:G"</span><span class="op">)</span>,
+                     col_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Convert the expand column into multiple columns with each vaccine that was</span>
 <span class="co"># administered and convert percent coverage into a decimal.</span>
-<span class="no">coverage_series</span> <span class="kw">&lt;-</span> <span class="no">coverage_series</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span>(<span class="kw">Percent_coverage</span> <span class="kw">=</span> <span class="no">Percent_covrage</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">Percent_coverage</span> <span class="kw">=</span> <span class="no">Percent_coverage</span> / <span class="fl">100</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">tidyr</span><span class="kw ns">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span>(<span class="no">Vaccine</span>, <span class="no">Percent_coverage</span>)
+<span class="va">coverage_series</span> <span class="op">&lt;-</span> <span class="va">coverage_series</span> <span class="op">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>Percent_coverage <span class="op">=</span> <span class="va">Percent_covrage</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Percent_coverage <span class="op">=</span> <span class="va">Percent_coverage</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span><span class="va">Vaccine</span>, <span class="va">Percent_coverage</span><span class="op">)</span>
 
 <span class="co"># Convert the year to a character and remove all variables that have more than</span>
 <span class="co"># 40% missing data</span>
-<span class="no">coverage_series</span>$<span class="no">Year</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">coverage_series</span>$<span class="no">Year</span>)
-<span class="no">coverage_series</span> <span class="kw">&lt;-</span> <span class="no">coverage_series</span>[, <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">coverage_series</span>)) <span class="kw">&gt;</span> <span class="fl">0.40</span>)]
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Year</span><span class="op">)</span>
+<span class="va">coverage_series</span> <span class="op">&lt;-</span> <span class="va">coverage_series</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">coverage_series</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.40</span><span class="op">)</span><span class="op">]</span>
 
 <span class="co"># Fixing country names</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">&lt;-</span> <span class="kw pkg">stringr</span><span class="kw ns">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span>(<span class="no">coverage_series</span>$<span class="no">Cname</span>, <span class="st">" \\(.*\\)"</span>)
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Brunei Darussalam"</span>] <span class="kw">&lt;-</span> <span class="st">"Brunei"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Cabo Verde"</span>] <span class="kw">&lt;-</span> <span class="st">"Cape Verde"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Congo"</span>] <span class="kw">&lt;-</span> <span class="st">"Republic of Congo"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Côte d'Ivoire"</span>] <span class="kw">&lt;-</span> <span class="st">"Ivory Coast"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Democratic People's Republic of Korea"</span>] <span class="kw">&lt;-</span> <span class="st">"North Korea"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Lao People's Democratic Republic"</span>] <span class="kw">&lt;-</span> <span class="st">"Laos"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"North Macedonia"</span>] <span class="kw">&lt;-</span> <span class="st">"Macedonia"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Republic of Moldova"</span>] <span class="kw">&lt;-</span> <span class="st">"Moldova"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Syrian Arab Republic"</span>] <span class="kw">&lt;-</span> <span class="st">"Syria"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"United Republic of Tanzania"</span>] <span class="kw">&lt;-</span> <span class="st">"Tanzania"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Viet Nam"</span>] <span class="kw">&lt;-</span> <span class="st">"Vietnam"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"United States of America"</span>] <span class="kw">&lt;-</span> <span class="st">"USA"</span>
-<span class="no">coverage_series</span>$<span class="no">Cname</span>[<span class="no">coverage_series</span>$<span class="no">Cname</span> <span class="kw">==</span> <span class="st">"Russian Federation"</span>] <span class="kw">&lt;-</span> <span class="st">"Russia"</span></pre></body></html></div>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span>, <span class="st">" \\(.*\\)"</span><span class="op">)</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Brunei Darussalam"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Brunei"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Cabo Verde"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Cape Verde"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Congo"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Republic of Congo"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Côte d'Ivoire"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Ivory Coast"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Democratic People's Republic of Korea"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"North Korea"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Lao People's Democratic Republic"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Laos"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"North Macedonia"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Macedonia"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Republic of Moldova"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Moldova"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Syrian Arab Republic"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Syria"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"United Republic of Tanzania"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Tanzania"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Viet Nam"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Vietnam"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"United States of America"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"USA"</span>
+<span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span><span class="op">[</span><span class="va">coverage_series</span><span class="op">$</span><span class="va">Cname</span> <span class="op">==</span> <span class="st">"Russian Federation"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Russia"</span></code></pre></div>
 </div>
 <div id="visualize" class="section level2">
 <h2 class="hasAnchor">
 <a href="#visualize" class="anchor"></a>Visualize</h2>
 <p>Now that we have read in all our data and properly formatted it, the next step is to visualize our data. In order to achieve this, we will find the average vaccination rates in each country and then plot those on a world map.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># Finding average vaccination rates in each country</span>
-<span class="no">to_map</span> <span class="kw">&lt;-</span> <span class="no">coverage_series</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">Cname</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span>(<span class="kw">BCG</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">BCG</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">DTP1</span>    <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">DTP1</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">DTP3</span>    <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">DTP3</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">HepB3</span>   <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">HepB3</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">MCV1</span>    <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">MCV1</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">TT2plus</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">TT2plus</span>*<span class="fl">100</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>),
-                   <span class="kw">.groups</span> <span class="kw">=</span> <span class="st">"drop"</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Finding average vaccination rates in each country</span>
+<span class="va">to_map</span> <span class="op">&lt;-</span> <span class="va">coverage_series</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Cname</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>BCG     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">BCG</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   DTP1    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">DTP1</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   DTP3    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">DTP3</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   HepB3   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">HepB3</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   MCV1    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">MCV1</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   TT2plus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">TT2plus</span><span class="op">*</span><span class="fl">100</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
+                   .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
 
 <span class="co"># Determine min and max values. This will allows us to make a nicer looking plot</span>
 <span class="co"># with more informative shading</span>
-<span class="no">min_v</span> <span class="kw">=</span> <span class="kw pkg">DescTools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/DescTools/man/RoundTo.html">RoundTo</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">to_map</span>$<span class="no">DTP3</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>), <span class="fl">5</span>)
-<span class="no">max_v</span> <span class="kw">=</span> <span class="kw pkg">DescTools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/DescTools/man/RoundTo.html">RoundTo</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">to_map</span>$<span class="no">DTP3</span>, <span class="kw">na.rm</span> <span class="kw">=</span> <span class="no">T</span>), <span class="fl">5</span>)
-<span class="no">diff</span> <span class="kw">=</span> <span class="no">max_v</span> - <span class="no">min_v</span>
+<span class="va">min_v</span> <span class="op">=</span> <span class="fu">DescTools</span><span class="fu">::</span><span class="fu"><a href="https://andrisignorell.github.io/DescTools/reference/RoundTo.html">RoundTo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">to_map</span><span class="op">$</span><span class="va">DTP3</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span>
+<span class="va">max_v</span> <span class="op">=</span> <span class="fu">DescTools</span><span class="fu">::</span><span class="fu"><a href="https://andrisignorell.github.io/DescTools/reference/RoundTo.html">RoundTo</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">to_map</span><span class="op">$</span><span class="va">DTP3</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="fl">5</span><span class="op">)</span>
+<span class="va">diff</span> <span class="op">=</span> <span class="va">max_v</span> <span class="op">-</span> <span class="va">min_v</span>
 
 <span class="co"># Based on min and max values, determine optimal breaks. We stipulate</span>
 <span class="co"># that there should be at least five breaks</span>
-<span class="kw">if</span> (<span class="no">diff</span> <span class="kw">&lt;=</span> <span class="fl">5</span>){
-  <span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">min_v</span>, <span class="no">max_v</span>, <span class="fl">1</span>)
-} <span class="kw">else</span> <span class="kw">if</span> (<span class="no">diff</span> <span class="kw">&lt;=</span> <span class="fl">25</span>){
-  <span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">min_v</span>, <span class="no">max_v</span>, <span class="fl">5</span>)
-} <span class="kw">else</span> {
-  <span class="no">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="no">min_v</span>, <span class="no">max_v</span>, <span class="fl">10</span>)
-}
+<span class="kw">if</span> <span class="op">(</span><span class="va">diff</span> <span class="op">&lt;=</span> <span class="fl">5</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">min_v</span>, <span class="va">max_v</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">diff</span> <span class="op">&lt;=</span> <span class="fl">25</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">min_v</span>, <span class="va">max_v</span>, <span class="fl">5</span><span class="op">)</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="va">breaks</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="va">min_v</span>, <span class="va">max_v</span>, <span class="fl">10</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="no">countries</span> <span class="kw">=</span> <span class="kw pkg">ggplot2</span><span class="kw ns">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/map_data.html">map_data</a></span>(<span class="st">"world"</span>)
+<span class="va">countries</span> <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/map_data.html">map_data</a></span><span class="op">(</span><span class="st">"world"</span><span class="op">)</span>
 <span class="co"># setdiff(to_map$Cname, countries$region)</span>
 <span class="co"># setdiff(countries$region, to_map$Cname)</span>
-
+  
 <span class="co"># Combine mapping data and our data</span>
-<span class="no">world_map</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="no">countries</span>, <span class="no">to_map</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"region"</span> <span class="kw">=</span> <span class="st">"Cname"</span>))
+<span class="va">world_map</span> <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">countries</span>, <span class="va">to_map</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"region"</span> <span class="op">=</span> <span class="st">"Cname"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Create map</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">world_map</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">.data</span>$<span class="no">long</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">.data</span>$<span class="no">lat</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">.data</span>$<span class="no">group</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="no">DTP3</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_map.html">coord_quickmap</a></span>() + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span>(<span class="kw">color</span> <span class="kw">=</span> <span class="st">"black"</span>) +
-  <span class="kw pkg">viridis</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/viridis/man/scale_viridis.html">scale_fill_viridis</a></span>(<span class="kw">option</span> <span class="kw">=</span> <span class="st">"viridis"</span>, <span class="kw">breaks</span> <span class="kw">=</span> <span class="no">breaks</span>, <span class="kw">limits</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">min_v</span>, <span class="no">max_v</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">plot.title</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">15</span>),
-      <span class="kw">legend.title</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="kw">vjust</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">10</span>), <span class="kw">legend.text</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">10</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Plot of DTP Rates in the World"</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="st">"Rates (%)"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">world_map</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.data</span><span class="op">$</span><span class="va">long</span>, y <span class="op">=</span> <span class="va">.data</span><span class="op">$</span><span class="va">lat</span>, group <span class="op">=</span> <span class="va">.data</span><span class="op">$</span><span class="va">group</span>, fill <span class="op">=</span> <span class="va">DTP3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_map.html">coord_quickmap</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_polygon.html">geom_polygon</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">viridis</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridis/reference/scale_viridis.html">scale_fill_viridis</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"viridis"</span>, breaks <span class="op">=</span> <span class="va">breaks</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">min_v</span>, <span class="va">max_v</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>hjust <span class="op">=</span> <span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>,
+      legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>vjust <span class="op">=</span> <span class="fl">2</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, legend.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Plot of DTP Rates in the World"</span>, fill <span class="op">=</span> <span class="st">"Rates (%)"</span><span class="op">)</span></code></pre></div>
 <p><img src="WHO_data_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 </div>
 <div id="modeling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#modeling" class="anchor"></a>Modeling</h2>
 <p>The final step is to combine everything together and try to predict the number of cases based on the vaccination rates worldwide. As an example, we will focus on the year 2015.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># Combine data</span>
-<span class="no">incidence_series_2015</span> <span class="kw">&lt;-</span> <span class="no">incidence_series</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">Year</span> <span class="kw">==</span> <span class="st">"2015"</span>)
-<span class="no">coverage_series_2015</span> <span class="kw">&lt;-</span> <span class="no">coverage_series</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">Year</span> <span class="kw">==</span> <span class="st">"2015"</span>)
-<span class="no">coverage_series_2015</span>$<span class="no">TT2plus</span> <span class="kw">&lt;-</span> <span class="kw">NULL</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Combine data</span>
+<span class="va">incidence_series_2015</span> <span class="op">&lt;-</span> <span class="va">incidence_series</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="st">"2015"</span><span class="op">)</span>
+<span class="va">coverage_series_2015</span> <span class="op">&lt;-</span> <span class="va">coverage_series</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Year</span> <span class="op">==</span> <span class="st">"2015"</span><span class="op">)</span>
+<span class="va">coverage_series_2015</span><span class="op">$</span><span class="va">TT2plus</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
 
-<span class="no">combined_2015</span> <span class="kw">&lt;-</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">full_join</a></span>(<span class="no">incidence_series_2015</span>, <span class="no">coverage_series_2015</span>,
-                                  <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"WHO_REGION"</span>, <span class="st">"ISO_code"</span>,
-                                         <span class="st">"Cname"</span>, <span class="st">"Year"</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">Cases</span>, <span class="no">BCG</span>, <span class="no">DTP1</span>, <span class="no">DTP3</span>, <span class="no">HepB3</span>, <span class="no">MCV1</span>, <span class="no">Pol3</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>()
+<span class="va">combined_2015</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">full_join</a></span><span class="op">(</span><span class="va">incidence_series_2015</span>, <span class="va">coverage_series_2015</span>, 
+                                  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"WHO_REGION"</span>, <span class="st">"ISO_code"</span>, 
+                                         <span class="st">"Cname"</span>, <span class="st">"Year"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">Cases</span>, <span class="va">BCG</span>, <span class="va">DTP1</span>, <span class="va">DTP3</span>, <span class="va">HepB3</span>, <span class="va">MCV1</span>, <span class="va">Pol3</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># Run a linear regression and compute the test R2 value</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">0</span>)
-<span class="no">t_sample</span> <span class="kw">=</span> <span class="kw pkg">caTools</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caTools/man/sample.split.html">sample.split</a></span>(<span class="no">combined_2015</span>$<span class="no">Cases</span>, <span class="kw">SplitRatio</span> <span class="kw">=</span> <span class="fl">0.7</span>)
-<span class="no">t_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">combined_2015</span>, <span class="no">t_sample</span> <span class="kw">==</span> <span class="fl">TRUE</span>)
-<span class="no">t_test</span>  <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span>(<span class="no">combined_2015</span>, <span class="no">t_sample</span> <span class="kw">==</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+<span class="va">t_sample</span> <span class="op">=</span> <span class="fu">caTools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caTools/man/sample.split.html">sample.split</a></span><span class="op">(</span><span class="va">combined_2015</span><span class="op">$</span><span class="va">Cases</span>, SplitRatio <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>
+<span class="va">t_train</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">combined_2015</span>, <span class="va">t_sample</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">t_test</span>  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">combined_2015</span>, <span class="va">t_sample</span> <span class="op">==</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="no">lm</span> <span class="kw">&lt;-</span> <span class="kw pkg">stats</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">Cases</span> ~<span class="no">.</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">t_train</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">lm</span>)
+<span class="va">lm</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Cases</span> <span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">t_train</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lm</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; stats::lm(formula = Cases ~ ., data = t_train)</span>
@@ -288,9 +294,9 @@
 <span class="co">#&gt; Multiple R-squared:  0.02868,    Adjusted R-squared:  -0.06383 </span>
 <span class="co">#&gt; F-statistic:  0.31 on 6 and 63 DF,  p-value: 0.9295</span>
 
-<span class="no">predict_lm</span> <span class="kw">&lt;-</span> <span class="no">lm</span> <span class="kw">%&gt;%</span> <span class="kw pkg">stats</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">t_test</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span>(<span class="no">predict_lm</span>, <span class="no">t_test</span>$<span class="no">Cases</span>), <span class="fl">4</span>)))
-<span class="co">#&gt; [1] "Test R2 Linear: 0.0528"</span></pre></body></html></div>
+<span class="va">predict_lm</span> <span class="op">&lt;-</span> <span class="va">lm</span> <span class="op">%&gt;%</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">t_test</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Test R2 Linear:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu">caret</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/postResample.html">R2</a></span><span class="op">(</span><span class="va">predict_lm</span>, <span class="va">t_test</span><span class="op">$</span><span class="va">Cases</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Test R2 Linear: 0.0528"</span></code></pre></div>
 </div>
   </div>
 
@@ -309,7 +315,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
