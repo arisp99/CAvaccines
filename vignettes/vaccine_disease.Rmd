@@ -335,13 +335,22 @@ corr_data <- model_data %>%
 corr_mat <- Hmisc::rcorr(as.matrix(scaled_total_data), type = "spearman")
 M <- corr_mat$r
 P_mat <- corr_mat$P
+diag(P_mat) <- 0
 
 # Plot the correlation values
-corrplot::corrplot(M, method = "color",
-                   col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
+corrplot::corrplot(
+  M, 
+  method = "color",
+  col = RColorBrewer::brewer.pal(n=8, name="PuBu"),
   addCoef.col = "black",
-  tl.col = "black", tl.srt = 50,tl.cex = 0.60,
-  p.mat = P_mat, sig.level = 0.05, pch.cex = 5,
-  mar=c(0,0,2,0), number.cex = 1)
+  tl.col = "black", 
+  tl.srt = 50, 
+  tl.cex = 0.60,
+  p.mat = P_mat, 
+  sig.level = 0.05, 
+  pch.cex = 5,
+  mar = c(0,0,2,0), 
+  number.cex = 1
+)
 ```
 
