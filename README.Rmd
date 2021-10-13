@@ -33,14 +33,14 @@ hexSticker::sticker(a, package="CAvaccines",
 
 
 <!-- badges: start -->
-[![R build status](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
-[![Build Status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
+[![R-CMD-check](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
+[![Travis build status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 The goal of CAvaccines is to analyze the relationship between vaccination rates
-and infectious disease incidence in California counties
+and infectious disease incidence in California counties.
 
 ## Installation
 To install the package, please run the code below. In order to install, devtools

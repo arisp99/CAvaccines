@@ -1,34 +1,32 @@
-Package: CAvaccines
 Type: Package
+Package: CAvaccines
 Title: An Analysis of CA Vaccination Rates and Disease Occurrence
 Version: 0.1.0
-Authors@R: person(given = "Aris",
-             family = "Paschalidis",
-             role = c("aut", "cre"),
-             email = "aris.paschalidis@gmail.com",
-             comment = c(ORCID = "0000-0003-2247-1885"))
+Authors@R: 
+    person("Aris", "Paschalidis", , "aris.paschalidis@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2247-1885"))
 Maintainer: Aris Paschalidis <aris.paschalidis@gmail.com>
-URL: https://arisp99.github.io/CAvaccines/, https://github.com/arisp99/Cavaccines
-BugReports: https://github.com/arisp99/Cavaccines/issues 
-Description: Final project for BIOL 1600: Introduction to Vaccines. In this
-  project, I examine the vaccination rates of CA students and the number of
-  cases for various infectious diseases. 
+Description: Final project for BIOL 1600: Introduction to Vaccines. In
+    this project, I examine the vaccination rates of CA students and the
+    number of cases for various infectious diseases.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-Depends: R (>= 3.6)
+URL: https://arisp99.github.io/CAvaccines/,
+    https://github.com/arisp99/Cavaccines
+BugReports: https://github.com/arisp99/Cavaccines/issues
+Depends: 
+    R (>= 3.6)
 Imports:
-    caTools,
     caret,
+    caTools,
     corrplot,
     DescTools,
     dplyr,
-    Hmisc,
-    magrittr,
-    maps,
     ggplot2,
     ggsci,
     gifski,
+    Hmisc,
+    magrittr,
+    maps,
     RColorBrewer,
     rlang,
     scales,
@@ -45,6 +43,9 @@ Suggests:
     stringr,
     tidyr,
     transformr
-RoxygenNote: 7.1.0
-VignetteBuilder: knitr
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
 Language: en-US
+LazyData: true
+RoxygenNote: 7.1.2

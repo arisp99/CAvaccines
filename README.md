@@ -5,10 +5,9 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
-[![Build
-Status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
+[![R-CMD-check](https://github.com/arisp99/CAvaccines/workflows/R-CMD-check/badge.svg)](https://github.com/arisp99/CAvaccines/actions)
+[![Travis build
+status](https://travis-ci.com/arisp99/CAvaccines.svg?branch=master)](https://travis-ci.com/arisp99/CAvaccines)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License:
@@ -61,7 +60,7 @@ disease incidence of pertussis in California counties from the years of
 The data is detailed in full in the associated help pages, but we
 summarize the datasets below.
 
-  - `county_vaccination` is a dataset containing information about
+-   `county_vaccination` is a dataset containing information about
     vaccination rates of K-12 students for each CA county for the years
     of 2008-2017. The dataset contains the total number of students
     enrolled in K-12 schools in each county and various vaccination
@@ -70,7 +69,7 @@ summarize the datasets below.
     percent of students with a personal medical exemption, the number
     and percent of students with a personal belief exemption, and the
     number and percent of students with an up to data DTP vaccination.
-  - `pertussis` is a dataset containing all pertussis cases, arranged by
+-   `pertussis` is a dataset containing all pertussis cases, arranged by
     county, from the years of 2008-2017 in the state of California. The
     dataset contains the number of cases and the number of cases per
     100,000 people for every county and every year.
