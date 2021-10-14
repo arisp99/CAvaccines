@@ -4,8 +4,8 @@ pkgdown_sha: ~
 articles:
   WHO_data: WHO_data.html
   vaccine_disease: vaccine_disease.html
-last_built: 2021-10-13T23:46Z
+last_built: 2021-10-14T00:23Z
 urls:
-  reference: https://arisp99.github.io/CAvaccines//reference
-  article: https://arisp99.github.io/CAvaccines//articles
+  reference: https://cavaccines.arispas.com/reference
+  article: https://cavaccines.arispas.com/articles
 
